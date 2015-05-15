@@ -1,0 +1,48 @@
+<% content_for :titulo do %>
+  Artículos del laboratorio de <%= @laboratorio.nombre %>
+<% end %>
+
+<div id="articulos_para_prestamo">
+    <%= render 'layouts/articulos/articulos_prestamo'%>
+</div>
+
+<% unless @articulos.any? %>
+  <div class="alert alert-info">
+      No se encontraron artículos registrados
+  </div>
+<% end %>
+<% @articulos.in_groups_of(3, false) do |articulos_grupo| %>
+  <div class="row row-imagen">
+      <% articulos_grupo.each do |articulo| %>
+        <div class="col-sm-4">
+            <h4 class="text-center"><%= articulo.nombre %></h4>		
+            <% if articulo.disponible? %>
+              <div class="text-center text-success">Disponible</div>
+            <% else %>
+              <div class="text-center text-danger">No disponible</div>
+            <% end %>
+            <%= image_tag articulo.get_imagen, class: 'center-block img-responsive'%>
+
+              <% if @total_por_grupos && @total_por_grupos[[articulo.nombre, articulo.modelo]] > 1 %>
+                <% total_grupo = @total_por_grupos[[articulo.nombre, articulo.modelo]]%>
+                <div class="text-center">
+                    <%= link_to articulos_por_grupo_path(@laboratorio, articulo.nombre, articulo.modelo), class: 'btn btn-primary link-white' do %>
+                        Ver artículos de este tipo <span class="badge"><%= total_grupo%></span>
+                      <% end %>
+                  </div>
+                <% else %>
+                  <div class="text-center">			
+                      <%= link_to 'Ver artículo', articulo, class: 'btn btn-primary link-white' %>
+                    </div>
+                    <% if articulo.disponible? %>
+                      <%= button_to "Registrar en préstamo", agregar_articulo_prestamo_path(articulo), class: 'btn btn-default center-block btn-xs margin-5', remote: true %>
+                      <% end %>
+                    <% end %>
+                </div>
+              <% end %>
+          </div>
+        <% end %>
+
+        <div class="text-center form-group">
+            <%= link_to 'Agregar artículo', new_articulo_path, class: 'btn btn-default' %>	
+          </div>

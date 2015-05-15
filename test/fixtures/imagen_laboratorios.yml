@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  imagen: MyString
+  descripcion: MyText
+  laboratorio_id: 
+
+two:
+  imagen: MyString
+  descripcion: MyText
+  laboratorio_id: 

@@ -1,0 +1,6 @@
+<%= bootstrap_form_for(@carrera) do |f| %>
+
+    <%= f.text_field :nombre %>
+    <%= f.select :departamento_id, options_for_select(Departamento.all.map {|d| [d.nombre, d.id]}, @carrera.departamento) %>
+    <%= f.submit 'Guardar', class: 'btn btn-primary center-block' %>
+<% end %>

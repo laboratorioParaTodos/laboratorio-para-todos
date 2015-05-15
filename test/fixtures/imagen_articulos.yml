@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  imagen: MyString
+  nombre_articulo: MyString
+  modelo_articulo: MyString
+  laboratorio_id: 
+  tipo_articulo: MyString
+
+two:
+  imagen: MyString
+  nombre_articulo: MyString
+  modelo_articulo: MyString
+  laboratorio_id: 
+  tipo_articulo: MyString

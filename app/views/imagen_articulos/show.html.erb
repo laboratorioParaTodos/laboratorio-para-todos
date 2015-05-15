@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Imagen:</strong>
+  <%= @imagen_articulo.imagen %>
+</p>
+
+<p>
+  <strong>Nombre articulo:</strong>
+  <%= @imagen_articulo.nombre_articulo %>
+</p>
+
+<p>
+  <strong>Modelo articulo:</strong>
+  <%= @imagen_articulo.modelo_articulo %>
+</p>
+
+<p>
+  <strong>Laboratorio:</strong>
+  <%= @imagen_articulo.laboratorio %>
+</p>
+
+<p>
+  <strong>Tipo articulo:</strong>
+  <%= @imagen_articulo.tipo_articulo %>
+</p>
+
+<%= link_to 'Edit', edit_imagen_articulo_path(@imagen_articulo) %> |
+<%= link_to 'Back', imagen_articulos_path %>

@@ -1,0 +1,104 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *= require rails_bootstrap_forms
+ *= require_tree .
+ *= require_self
+ * #04B404 Verde
+ * #3A01DF Azul
+ * #d95342 Rojo
+ */
+
+$brand-primary: <%= "#d95342" %> ;
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+body {
+  background-color: whitesmoke;
+}
+
+.container {
+  background-color: white;
+}
+
+.text-white {
+  color: white;
+}
+
+#barra_superior {
+  background-color: darken($brand-primary, 20%);
+}
+
+.logo-superior {
+  margin: 10px;
+  height: 150px;
+}
+
+a.link-white:visited {
+  color: white;
+}
+
+.img-slide {
+  width: 100%;
+}
+
+
+#carousel-imagenes {
+}
+
+#carousel_container {
+  margin-bottom: 10px;
+  width: 70%;
+}
+
+.carousel-inner > .item > img, .carousel-inner > .item > a > img {
+  height: 350px;
+}
+
+.row-imagen img {
+  height: 200px;
+}
+
+.row-imagen-modal img {
+	height: 100px;
+}
+
+.imagen-articulo img{
+  max-width: 70%;
+}
+
+#menu {
+  margin: 5px auto;
+}
+
+.row {
+  margin-bottom: 10px;
+}
+
+
+.imagen-usuario {
+  width: 20%;
+}
+
+.control-label {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.margin-5 {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+table.barby-barcode { border-spacing: 0; }
+tr.barby-row {}
+td.barby-cell { width: 3px; height: 700px; }
+td.barby-cell.on { background: #000; }

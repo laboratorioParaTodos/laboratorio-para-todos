@@ -1,0 +1,34 @@
+<% content_for :titulo do %>
+	Carreras registradas
+<% end %>
+
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Departamento</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @carreras.each do |carrera| %>
+      <tr>
+        <td><%= carrera.nombre %></td>
+        <td>
+        	<% if carrera.departamento %>
+        		<%= carrera.departamento.nombre %>       	
+        	<% end %>
+        </td>
+        <td><%= link_to 'Editar', edit_carrera_path(carrera), class: 'btn btn-warning link-white' %></td>
+        <td><%= link_to 'Eliminar', carrera, method: :delete, data: { confirm: '¿Está seguro que desea eliminar esta carrera?' }, class: 'btn btn-danger link-white' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<div class="text-center">
+	<%= link_to 'Agregar carrera', new_carrera_path, class: 'btn btn-primary link-white' %>
+</div>

@@ -1,0 +1,67 @@
+<%= content_for :titulo do %>
+  Detalles del préstamo
+<% end %>
+
+<%= bootstrap_form_for @prestamo do |f| %>
+  <div class="row">
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Usuario del préstamo" do %>
+            <%= link_to @prestamo.usuario_prestamo.nombre_completo, @prestamo.usuario_prestamo %>
+          <% end %>
+      </div>
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Artículo" do %>
+            <%= link_to @prestamo.articulo.nombre, @prestamo.articulo %>
+          <% end %>
+      </div>
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Fecha de préstamo" do %>
+            <%= @prestamo.fecha_de_prestamo %>
+          <% end %>
+      </div>
+  </div>
+  <div class="row">
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Fecha límite" do %>
+            <%= @prestamo.fecha_limite %>
+          <% end %>
+      </div>
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Fecha de devolución" do %>
+            <%= @prestamo.fecha_de_devolucion %>
+          <% end %>
+      </div>
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Profesor encargado" do %>	
+            <% unless @prestamo.profesor_encargado.nil? %>
+              <%= link_to @prestamo.profesor_encargado.nombre_completo, @prestamo.profesor_encargado %>
+            <% end %>
+          <% end %>
+      </div>		
+  </div>
+  <div class="row">
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Materia" do %>
+            <% unless @prestamo.materia.nil? %>
+              <%= @prestamo.materia.nombre %>
+            <% end %>
+          <% end %>
+      </div>
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Estado" do %>
+            <% if @prestamo.abierto?%>
+              <span class="text-success">Abierto</span>
+            <% elsif @prestamo.cerrado? %>
+              <span class="text-info">Cerrado</span>
+            <% else %>
+            <% end %>
+          <% end %>
+      </div>
+      <div class="form-group col-sm-4">
+          <%= f.static_control label: "Usuario prestamista" do %>
+            <%= @prestamo.usuario.nombre_completo %>
+          <% end  %>
+      </div>		
+  </div>
+<% end %>
+

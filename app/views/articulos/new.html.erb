@@ -1,0 +1,20 @@
+<div class="page-header">
+	<h1 class="text-primary text-center">Agregar artículo nuevo</h1>
+</div>
+<div class="text-center">
+	<%= bootstrap_form_tag  method: :get, layout: :inline do |f| %>
+		<h3>Llenar datos por código de artículo existente</h3>
+		<%= f.search_field 'codigo_de_barras', label: 'Código de barras',value: @codigo_barras%>
+		<%= f.submit 'Agregar por código', icon: :search%>
+	<% end %>
+</div>
+<hr/>
+
+<% if @articulo.imagen_articulo %>
+	
+	<%= image_tag @articulo.imagen_articulo.imagen.url, class: 'thumnbail center-block', width: 200%>
+<% end %>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', articulos_path %>

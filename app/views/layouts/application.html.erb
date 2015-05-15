@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Laboratorio para todos</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<div class="container">
+	<div class="row" id="barra_superior">
+		<div class="col-sm-2">
+			<%= link_to root_path do %>
+				<%= image_tag 'tec/logo1.jpg', class: 'center-block img-responsive logo-superior thumbnail' %>
+			<% end %>
+		</div>
+		<div class="col-sm-8">
+			<h1 class="text-white text-center">
+				Instituto Tecnológico de Ciudad Juárez<br />
+				<small class="text-white">Laboratorio Para Todos</small>
+			</h1>
+			<% unless  usuario_signed_in? %>
+				<%= button_to 'Iniciar sesión', new_usuario_session_path, class: 'btn btn-primary center-block' %>
+			<% else %>			
+				<%= button_to 'Cerrar sesión', destroy_usuario_session_path, class: 'btn btn-primary center-block', method: :delete %>
+			<% end %>
+		</div>
+		<div class="col-sm-2">
+			<%= image_tag 'tec/logo2.jpg', class: 'center-block img-responsive logo-superior thumbnail' %>
+		</div>
+	</div>
+	
+	
+	<div class="page-header">
+			<h1 class="text-center text-primary">
+				<%= yield :titulo %>
+			</h1>
+	</div>
+	<div id="menu">
+		<%= button_group class: 'btn-group-justified' do %>
+			<% Laboratorio.all.each do |laboratorio | %>
+				<%= bs_dropdown_button_to laboratorio.nombre, class: 'btn-primary' do %>
+					<li role="presentation" class="dropdown-header ">Artículos</li>
+					<li><%= link_to "Agregar artículo", agregar_nuevo_articulo_path(laboratorio)  %></li>
+					<li><%= link_to "Ver artículos", articulos_por_laboratorio_path(laboratorio) %></li>
+					<li class="divider"></li>
+					<li role="presentation" class="dropdown-header ">Usuarios de préstamos</li>
+					<li><%= link_to "Ver usuarios de préstamos", usuario_prestamos_path %></li>
+					<li><%= link_to "Agregar usuario de préstamos", new_usuario_prestamo_path %></li>
+					<li class="divider"></li>
+					<li role="presentation" class="dropdown-header ">Préstamos</li>
+					<li><%= link_to "Ver préstamos registrados", prestamos_registrados_path(laboratorio) %></li>
+					<li><%= link_to "Registrar nuevo préstamo", registrar_prestamo_path(laboratorio)%></li>
+					<li><%= link_to "Cerrar préstamo", prestamos_abiertos_path(laboratorio) %></li>
+					<li class="divider"></li>
+					<li role="presentatino" class="dropdown-header">Administración</li>
+					<li><%= link_to "Carreras", carreras_path %></li>
+					<li><%= link_to "Departamentos", departamentos_path %></li>
+					<li><%= link_to "Materias", materias_path %></li>
+					<li><%= link_to "Personalización" %></li>
+				<% end %>
+			<% end %>
+		<% end %>
+	</div>
+	<% if notice %>
+		<p class="alert alert-success"><%= notice %></p>
+	<% end %>
+	<% if alert %>
+		<p class="alert alert-danger"><%= alert %></p>
+	<% end %>
+	
+	<%= yield %>	
+</div>
+
+</body>
+</html>

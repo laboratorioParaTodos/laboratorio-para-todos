@@ -1,0 +1,35 @@
+
+<% content_for :titulo do %>
+Imágenes para mostrarse en la página princial del laboratorio de <%= @imagen_laboratorio.laboratorio.nombre %>
+<% end %>
+
+<% @imagenes_laboratorios.in_groups_of(3, false) do |grupo_imagenes| %>
+	<div class="row">
+		<% grupo_imagenes.each do |imagen_laboratorio| %>
+			<div class="col-sm-4">
+				<%= bootstrap_form_for imagen_laboratorio do |f| %>
+					<%= image_tag imagen_laboratorio.imagen.url, class: 'center-block img-responsive thumbnail' %>
+					<%= f.text_area :descripcion %>
+					<div class="text-center">
+						<%= f.submit "Modificar imagen", class: ' btn btn-primary' %>
+						<%= link_to 'Eliminar imagen', imagen_laboratorio, method: :delete, data: { confirm: '¿Está seguro que desea eliminar esta imagen?'} , class: 'btn btn-default' %>
+					</div>
+					
+				<% end %>
+		    </div>
+						
+		<% end %>
+	</div>
+	
+<% end %>
+
+<hr />
+
+<div class="page-header"><h2 class="text-primary">Agregar nueva imagen</h2></div>
+<%= bootstrap_form_for @imagen_laboratorio do |f| %>
+	<%= f.file_field :imagen %>
+	<%= f.text_area :descripcion %>
+	<%= f.hidden_field :laboratorio_id, value: @laboratorio.id %>
+	<%= f.submit "Agregar imagen", class: "btn btn center-block btn-primary" %>
+	
+<% end %>

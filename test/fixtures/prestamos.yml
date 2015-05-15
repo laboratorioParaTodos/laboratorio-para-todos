@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  prestamista_id: 
+  articulo_id: 
+  fecha_de_prestamo: 2015-04-12
+  fecha_limite: 2015-04-12
+  fecha_de_devolucion: 2015-04-12
+  profesor_encargado_id: 
+  materia_id: 
+
+two:
+  prestamista_id: 
+  articulo_id: 
+  fecha_de_prestamo: 2015-04-12
+  fecha_limite: 2015-04-12
+  fecha_de_devolucion: 2015-04-12
+  profesor_encargado_id: 
+  materia_id: 

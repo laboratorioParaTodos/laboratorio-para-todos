@@ -1,0 +1,25 @@
+<%= bootstrap_form_for(@imagen_articulo) do |f| %>
+  <%= f.alert_message "Error al registrar la imagen. Por favor solucione los siguientes errores: s" %>
+
+  
+  <%= f.file_field :imagen %>
+  
+  <% if @articulo.present? %>
+  	<%= f.static_control :nombre_articulo, label: "Nombre del artículo" %>
+  	<%= f.static_control :modelo_articulo %>
+  	<%= f.static_control label: "Laboratorio" do %>
+	   <%= @imagen_articulo.laboratorio.nombre %>
+    <% end %>
+    <%= f.hidden_field :nombre_articulo %>
+    <%= f.hidden_field :modelo_articulo %>
+    <%= f.hidden_field :laboratorio_id %>
+    <%= hidden_field_tag :articulo_id, @articulo.id %>
+  <% else %>
+  	<%= f.text_field :nombre_articulo, label: "Nombre del artículo" %>
+  	<%= f.text_field :modelo_articulo, label: "Modelo y/o marca del artículo"%>
+  	<%= f.select :laboratorio_id, options_for_select(Laboratorio.all.map { |l| [l.nombre, l.id]}), label: "Laboratorio del artículo" %>
+  <% end %>
+  
+  
+  <%= f.submit "Guardar", class: "center-block btn btn-primary" %>
+<% end %>

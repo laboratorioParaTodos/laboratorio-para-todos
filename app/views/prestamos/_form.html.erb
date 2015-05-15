@@ -1,0 +1,24 @@
+
+<%= bootstrap_form_for(@prestamo) do |f| %>
+  
+  
+  <% unless @prestamo.new_record? %>
+  	<% mensaje = "El artículo que se registro en el préstamos no es modificable, si se registro un artículo incorrecto se recomienda cerrar el préstamo y abrir uno nuevo."%>
+  	<%= f.static_control label: "Artículo", help: mensaje do %>
+  		<%=@prestamo.articulo.nombre %>
+  	<% end %>
+  <% else %> 
+  	<%= f.select :usuario_prestamo_id, options_for_select(UsuarioPrestamo.all.map { |p| [p.nombre_completo, p.id ]}, @prestamo.usuario_prestamo.nil? ? nil : @prestamo.usuario_prestamo.id) %> 
+	<%= hidden_field 'articulos_acumulados', true%>
+  <% end %>
+  
+  
+  <%= f.date_select :fecha_de_prestamo, :use_month_names => Prestamo.meses %>
+  <%= f.date_select :fecha_limite, :use_month_names => Prestamo.meses, default: Time.now + 2.days  %>
+  <% unless @prestamo.fecha_de_devolucion.nil? %>
+  	<%= f.date_select :fecha_de_devolucion %>
+  <% end %>
+  <%= f.select :profesor_encargado_id, options_for_select(UsuarioPrestamo.all.where(:categoria => UsuarioPrestamo.categorias[:profesor]).map {|p| [p.nombre_completo, p.id ]}, @prestamo.profesor_encargado.nil? ? nil : @prestamo.profesor_encargado.id) %>
+  <%= f.select :materia_id, options_for_select(Materia.all.map { |m| [m.nombre, m.id ]}) %>
+  <%= f.submit "Registrar", class: "btn btn-primary center-block" %>
+<% end %>

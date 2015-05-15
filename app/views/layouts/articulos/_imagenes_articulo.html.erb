@@ -1,0 +1,19 @@
+
+<% if @articulo && @imagenes_articulo %>
+	<div class="container-fluid">
+		<% @imagenes_articulo.in_groups_of(3, false) do |ig| %>
+			<div class="row row-imagen">
+				<% ig.each do |i| %>
+					<div class="col-md-4">
+						<%= image_tag i.imagen.url, class: 'thumbnail center-block' %>
+						<% if @articulo.imagen_articulo == i %>
+							<p class="text-center text-info">Imagen actual</p>
+						<% else %>
+							<%= button_to 'Asignar imagen', asignar_imagen_articulo_path(id_articulo: @articulo.id, id_imagen: i.id), class: 'btn btn-default center-block btn-sm' %>					
+						<% end%>
+					</div>
+				<% end %>
+			</div>
+		<% end %>
+	</div>
+<% end %>

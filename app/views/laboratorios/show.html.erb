@@ -1,0 +1,69 @@
+<% content_for :titulo do %>
+	Laboratorio de <%= @laboratorio.nombre %>
+<% end %>
+
+
+<% if @imagenes.length > 1 %>
+<div id="carousel_container" class="center-block">
+	<div id="carousel_laboratorios" class="carousel slide center-block" data-ride='carousel'>
+		<ol class="carousel-indicators">
+			<% @imagenes.each_with_index do |imagen, index| %>
+				<% if index == 1 %>	
+					<li data-target="#carousel_laboratorios" data-slide-to="0" class="active"></li>
+				<% else %>
+					<li data-target="#carousel_laboratorios" data-slide-to="<%= index %>"></li>
+				<% end %>
+			<% end %>
+			
+		</ol>
+		<div class="carousel-inner center-block" id='carousel-imagenes' role='listbox'>
+			<% @imagenes.each_with_index do |imagen, index| %>
+				<% if index == 1 %>	
+					<div class="item active">
+						<%= image_tag imagen.imagen.url, class: 'img-slide' %>
+						<div class="carousel-caption">
+							<h3><%= imagen.descripcion %></h3>
+						</div>
+					</div>
+				<% else %>
+					<div class="item">
+						<%= image_tag imagen.imagen.url, class: 'img-slide' %>
+						<div class="carousel-caption">
+							<%= imagen.descripcion %>
+						</div>
+					</div>
+				<% end %>
+			<% end %>
+			
+		</div>
+		<a class="left carousel-control" href="#carousel_laboratorios" role="button" data-slide="prev">
+		    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		    <span class="sr-only">Anterior</span>
+		</a>
+		<a class="right carousel-control" href="#carousel_laboratorios" role="button" data-slide="next">
+		    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+		    <span class="sr-only">Siguiente</span>
+		</a>
+			
+	</div>
+</div>
+<% elsif @imagenes.length == 1 %>
+	<div class="alert alert-info"><strong>Sólo se encontró una imagen del laboratorio. </strong>
+		Agregue más <%= link_to 'imágenes', imagenes_por_laboratorio_path(@laboratorio), class: 'alert-link' %> para crear una presentación
+	</div>
+<% else %>
+	<div class="alert alert-info">No se encontraron imágenes del laboratorio</div>
+<% end %>
+
+<p class="text-center">
+	<%= @laboratorio.descripcion %>
+</p>
+<div class="text-center">
+	
+	<%= link_to 'Artículos de este laboratorio', articulos_por_laboratorio_path(@laboratorio.id), class: 'btn btn-primary text-center link-white' %>
+	<%= link_to 'Editar imagenes del laboratorio', imagenes_por_laboratorio_path(@laboratorio), class: 'btn btn-default text-center ' %>
+	<%= link_to 'Editar información del laboratorio', edit_laboratorio_path(@laboratorio), class: 'btn btn-default text-center ' %>
+
+</div>
+<%= link_to 'Edit', edit_laboratorio_path(@laboratorio) %> |
+<%= link_to 'Back', laboratorios_path %>

@@ -1,0 +1,29 @@
+<% content_for :titulo do %>
+	Registrar nuevo usuario
+<% end %>
+
+
+<%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+
+  <%= f.email_field :email, autofocus: true %>
+
+  <% if @validatable %>
+  <em>(<%= @minimum_password_length %> caracteres mínimos)</em>
+  <% end %><br />
+  <%= f.password_field :password, autocomplete: "off", label: "Contraseña" %>
+
+  <%= f.password_field :password_confirmation, autocomplete: "off", label: "Confirmación de contraseña" %>
+  
+  <%= f.select :laboratorio_id, options_for_select(Laboratorio.all.map {|l| [l.nombre, l.id]})%>
+  <%= f.text_field :nombre %>
+  <%= f.text_field :apellido_paterno %>
+  <%= f.text_field :apellido_materno %>
+  
+  <%= f.select :rol, options_for_select(Usuario.roles.keys.map {|key| [key.to_s.capitalize.sub("_", " "), key]})%>
+  
+  <%= f.submit "Registrar usuario" %>
+
+<% end %>
+
+<%= render "usuarios/shared/links" %>

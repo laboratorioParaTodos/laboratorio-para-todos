@@ -1,0 +1,108 @@
+<% content_for :titulo do %>
+	Préstamos registrados del laboratorio de <%= @laboratorio.nombre %>
+<% end %>
+
+<%= tabbable do |periodo| %>
+
+	<% periodo.tab "Fecha" %>
+	<% if @tipo_periodo == :mes %>
+		<% periodo.tab "Mes", active: true %>
+	<% else %>
+		<% periodo.tab "Mes"%>
+	<% end %>
+	<% if @tipo_periodo == :anio || @tipo_periodo == :todos %>
+		<% periodo.tab "Año", active: true %>
+	<% else %>
+		<% periodo.tab "Año"%>
+	<% end %>
+	<% periodo.tab_pane active: @periodos[:fecha] do %>
+		<div class="text-center">
+			<p>Ver préstamos por fecha</p>
+			<%= bootstrap_form_tag layout: :inline, form_id: "periodo_prestamos", method: :get do |f| %>
+				<%= f.date_select :periodo, hide_label: true, selected: @date, use_month_names: Prestamo.meses %>
+				<%= f.primary "Ir a fecha", name: "fecha" %>
+			<% end %>
+		</div>
+	<% end %>
+	<% periodo.tab_pane active: @periodos[:mes] do %>
+		<div class="text-center">
+			<p>Ver préstamos por mes</p>
+			<%= bootstrap_form_tag layout: :inline, form_id: "periodo_prestamos", method: :get do |f| %>
+				<%= f.date_select :periodo, hide_label: true, selected: @date, discard_day: true, use_month_names: Prestamo.meses %>
+				<%= f.primary "Ir al mes", name: "mes" %>
+			<% end %>
+		</div>
+	<% end %>
+	<% periodo.tab_pane active: @periodos[:anio] do %>
+		<div class="text-center">
+			<p>Ver préstamos por año</p>
+			<%= bootstrap_form_tag layout: :inline, form_id: "periodo_prestamos", method: :get do |f| %>
+				<%= f.date_select :periodo, discard_day: true, discard_month: true, hide_label: true, selected: @date %>
+				<%= f.primary "Ir al año", name: "anio" %>
+				<%= f.submit "Ver todos los préstamos registrados", name: "todos"%>
+			<% end %>
+			
+		</div>
+	<% end %>
+
+<% end %>
+<hr />
+<h3 class="text-center text-primary">
+	<% case @tipo_periodo %>	
+			<% when :todos %>
+				Todos los préstamos registrados
+			<% when :anio %>
+				Préstamos del año <%= @date.year %>
+			<% when :mes %>
+				Préstamos registrados en el mes de <%= Prestamo.meses[@date.month - 1] %> del <%= @date.year %> 
+			<% when :dia %>
+				Préstamos registrados el <%= @date.day%> de <%= Prestamo.meses[@date.month - 1]%> del <%= @date.year%>
+	<% end %>
+</h3>
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Usuario préstamo</th>
+      <th>Articulo</th>
+      <th>Fecha de prestamo</th>
+      <th>Fecha limite</th>
+      <th>Fecha de devolucion</th>
+      <th>Profesor encargado</th>
+      <th>Materia</th>
+      <th>Estado</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @prestamos.each do |prestamo| %>
+      <tr>
+        <td><%= prestamo.usuario_prestamo.nombre_completo %></td>
+        <td><%= prestamo.articulo.nombre %></td>
+        <td><%= prestamo.fecha_de_prestamo %></td>
+        <td><%= prestamo.fecha_limite %></td>
+        <td><%= prestamo.fecha_de_devolucion %></td>
+        <td>
+        	<% unless prestamo.profesor_encargado.nil? %>
+        		<%= prestamo.profesor_encargado.nombre_completo %>
+        	<% end %>
+    	</td>
+        <td>
+        	<% unless prestamo.materia.nil? %>
+        		<%= prestamo.materia.nombre %>
+        	<% end %>
+        </td>
+        <td><%= prestamo.estado.capitalize %></td>
+        <td><%= link_to 'Ver préstamo', prestamo, class: 'btn btn-primary link-white' %></td>
+        <td><%= link_to 'Editar', edit_prestamo_path(prestamo), class: 'btn btn-default' %></td>
+        <td><%= link_to 'Eliminar', prestamo, method: :delete, data: { confirm: '¿Está seguro que desea eliminar este préstamo?' }, class: 'btn btn-danger link-white' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<div class="text-center">
+	<%= link_to 'Registrar nuevo préstamo', new_prestamo_path, class: "btn btn-primary link-white" %>	
+</div>

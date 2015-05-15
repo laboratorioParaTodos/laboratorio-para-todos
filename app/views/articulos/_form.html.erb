@@ -1,0 +1,36 @@
+<%= bootstrap_form_for(@articulo) do |f| %>
+  <% if @articulo.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@articulo.errors.count, "error") %> prohibited this articulo from being saved:</h2>
+
+      <ul>
+      <% @articulo.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.text_field :nombre %>
+  <%= f.text_field :modelo %>
+  
+  <% unless @articulo.laboratorio.nil? %>
+  	<%= f.static_control label: "Laboratorio " do %>
+  		<%= @articulo.laboratorio.nombre %>
+  	<% end %>
+  	<%= f.hidden_field :laboratorio_id, value: @articulo.laboratorio.id %>
+  <% end %>
+  <%= f.text_field :numero_de_serie %> 
+  <%= f.text_field :numero_de_inventario %>
+  <%= f.text_field :numero_de_sep %>
+  <%= f.text_area :descripcion %>
+  <%= f.check_box :disponible %>
+  <%= f.text_area :motivo %>
+  
+  <% if @articulo.new_record? %>
+  	<div class="form-group">
+  		<%= label_tag "Cantidad" %>
+  		<%= number_field_tag "cantidad", 1, min: 1, max: 50, class: 'form-control' %>
+  	</div>
+  <% end %>
+  <%= f.submit "Guardar", class: 'btn btn-primary center-block' %>
+<% end %>

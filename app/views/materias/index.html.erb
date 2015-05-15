@@ -1,0 +1,44 @@
+<% content_for :titulo do %>
+	Materias registradas
+<% end %>
+
+<div class="text-center">
+	<%= bootstrap_form_tag url: materias_path, layout: :inline, method: :get do |f| %>
+		<h4>Buscar por carrera</h4>
+		<%= f.select 'carrera', options_for_select(Carrera.all.map {|c| [c.nombre, c.id]}, @carrera)%>
+		<%= f.primary 'Buscar', icon: 'search'%>
+	<% end %>
+</div>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Clave</th>
+      <th>Nombre</th>
+      <th>Carrera</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @materias.each do |materia| %>
+      <tr>   	
+        <td><%= materia.clave %></td>
+        <td><%= materia.nombre %></td>
+        <td>
+        	<% if materia.carrera %>
+        		<%= materia.carrera.nombre %>
+        	<% end %>
+        </td>
+        <td><%= link_to 'Editar', edit_materia_path(materia), class: 'btn btn-warning link-white' %></td>
+        <td><%= link_to 'Eliminar', materia, method: :delete, data: { confirm: '¿Está seguro que desea eliminar esta materia?' }, class: 'btn btn-danger link-white' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<div class="text-center">
+	<%= link_to 'Agregar materia', new_materia_path, class: 'btn btn-primary link-white' %>
+</div>

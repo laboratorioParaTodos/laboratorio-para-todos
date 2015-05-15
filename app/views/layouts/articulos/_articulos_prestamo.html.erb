@@ -1,0 +1,34 @@
+
+<% if cookies[:articulos_para_prestamo] %>
+	<hr />
+	<% articulos_prestamo = JSON.parse(cookies[:articulos_para_prestamo]) %>
+	
+	<h4 class="text-center text-primary">Artículos para registrar en préstamo</h4>
+	<table class="table table-striped table-hover">
+		<tr>
+			<th>Nombre</th>
+			<th>Modelo/Marca</th>
+			<th>Código de barras</th>
+			<th>Descripción</th>
+			<th></th>
+		</tr>
+		<% articulos_prestamo.each do |articulo_id| %>
+			<tr>
+				<% articulo = Articulo.find(articulo_id)%>
+				<td><%= articulo.nombre %></td>
+				<td><%= articulo.modelo %></td>
+				<td><%= articulo.obtener_codigo_barras %></td>
+				<td><%= articulo.descripcion %></td>
+				<td><%= button_to "Eliminar de la lista", eliminar_articulo_prestamo_path(articulo), class:"btn btn-danger center-block btn-xs", remote: true%></td>
+				
+			</tr>
+		<% end %>
+	</table>
+	<% unless current_page?(action: :new, controller: :prestamos)%>
+		<div class="text-center">
+			<%= link_to "Ir a registrar préstamo", registrar_prestamo_path(@laboratorio.id), class: "btn btn-default btn-sm"%>
+		</div>
+		
+	<% end %>
+	<hr />
+<% end %>

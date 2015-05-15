@@ -1,0 +1,34 @@
+<% content_for :titulo do %>
+Detalles de usuario de préstamo
+<% end %>
+
+<div >
+	<%= image_tag "aplicacion/usuario.PNG", class: 'center-block img-responsive imagen-usuario'%>
+</div>
+<div>
+	<h3 class="text-center"><%= @usuario_prestamo.nombre_completo %></h3>
+</div>
+<h4 class="text-center text-primary">Tipo de usuario</h4>
+<p class="text-center">
+	<%= @usuario_prestamo.categoria.capitalize %>
+</p>
+
+<% unless @usuario_prestamo.numero_de_control.nil? %>
+	<h4 class="text-center text-primary">Número de control</h4>
+	<p class="text-center">
+		<%= @usuario_prestamo.numero_de_control %>
+	</p>
+<% end %>
+
+<% unless @usuario_prestamo.carrera.nil? %>
+	<h4 class="text-center text-primary">Carrera</h4>
+	<p class="text-center">
+		<%= @usuario_prestamo.carrera.nombre %>
+	</p>
+<% end %>
+
+<div class="text-center">	
+	<%= link_to 'Modificar usuario de préstamo', edit_usuario_prestamo_path(@usuario_prestamo), class: 'btn btn-default' %>
+	<%= link_to "Eliminar usuario de préstamo", @usuario_prestamo, method: :delete, class: 'btn btn-danger link-white', data: {confirm: "¿Está seguro de eliminar a este usuario? Este acción es irreversible."} %>
+</div>
+

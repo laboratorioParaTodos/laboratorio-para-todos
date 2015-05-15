@@ -1,0 +1,16 @@
+<%= bootstrap_form_for(@usuario_prestamo) do |f| %>
+  <%= f.select :categoria, options_for_select(UsuarioPrestamo.categorias.map { |c| [c.first.capitalize, c.first]}, @usuario_prestamo.categoria), label: 'Categoría' %>
+
+  <% if @usuario_prestamo.alumno?  %>
+    <%= f.text_field :numero_de_control %>
+    <%= f.select :carrera_id, options_for_select(Carrera.all.map { |c| [c.nombre, c.id ] }, onchange="actualizarForm(this)") %>
+  <% elsif @usuario_prestamo.profesor? || @usuario_prestamo.personal? %>
+    <%= f.text_field :rfc, label: "RFC" %>
+    <%= f.select :departamento, options_for_select(Departamento.all.map { |d| [d.nombre, d.id ] }) %>
+  <% end %>
+  <%= f.text_field :primer_nombre %>
+  <%= f.text_field :segundo_nombre %>
+  <%= f.text_field :apellido_paterno %>
+  <%= f.text_field :apellido_materno %>
+  <%= f.submit "Guardar", :class => "btn btn-primary center-block" %>
+<% end %>

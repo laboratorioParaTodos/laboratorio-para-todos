@@ -1,0 +1,83 @@
+
+<% content_for :titulo do %>
+  <%= @articulo.nombre %><br />
+  <small class="text-center"><%= @articulo.modelo %></small>
+
+<% end %>
+<div id="articulos_para_prestamo">
+    <%= render 'layouts/articulos/articulos_prestamo'%>
+</div>
+
+<div class="row">
+    <div class="col-sm-3">
+        <%= image_tag @articulo.get_imagen, class: ' thumbnail media-object img-responsive center-block'%>
+
+
+          <%= form_for(articulo_path(@articulo), remote: true, method: :get) do |f| %>
+            <%= f.submit "Cambiar imagen", class: 'center-block btn btn-default btn-sm' %>
+            <% end %>
+        </div>
+        <div class="col-sm-9">
+            <%= bootstrap_form_for @articulo do |f| %>
+
+              <div class="row">			
+
+                  <div class="col-sm-6"><%= f.static_control :nombre %></div>
+                  <div class="col-sm-6"><%= f.static_control :modelo %></div>
+
+              </div>
+              <div class="row">
+                  <div class="col-sm-6">
+                      <%= f.static_control label: "Laboratorio" do %>
+                        <%= @articulo.laboratorio.nombre %>
+                      <% end %>
+                  </div>
+                  <div class="col-sm-6">					
+                      <%= f.static_control :numero_de_serie, label: "Número de serie" %>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-6"><%= f.static_control :numero_de_sep, label: "Número de SEP" %></div>
+                  <div class="col-sm-6"><%= f.static_control :descripcion, label: "Descripción" %></div>
+              </div>
+
+
+              <div class="row">
+                  <div class="col-sm-6">
+                      <%= f.static_control "Disponibilidad" do %>
+                        <% if @articulo.disponible? %>
+                          <strong class="text-success">Disponible</strong>
+                        <% else %>
+                          <strong class="text-danger">No disponible</strong>
+                        <% end %>
+                      <% end %>
+                  </div>
+                  <div class="col-sm-6">
+                      <%= f.static_control :motivo %>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-sm-6">
+                      <label>Código de barras</label>
+                      <p class="form-control-static"><%= @articulo.obtener_codigo_barras%></p>
+                  </div>
+              </div>
+            <% end %>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <div class="form-group">
+            <%= link_to 'Modificar información del artículo', edit_articulo_path(@articulo), class: 'btn btn-default' %>
+              <%= link_to 'Ver otros artículos del laboratorio de ' + @articulo.laboratorio.nombre , articulos_por_laboratorio_path(@articulo.laboratorio), class: 'btn btn-default' %><br />
+            </div>
+            <% if @articulo.disponible? %>
+              <%= button_to "Registrar en préstamo", agregar_articulo_prestamo_path(@articulo), class: 'btn btn-default center-block btn-xs margin-5', remote: true %>
+              <% end %>
+
+              <%= link_to 'Eliminar este artículo', @articulo, method: :delete, data: { confirm: '¿Está seguro que desea eliminar este artículo?' }, class: 'btn btn-danger link-white' %>
+            </div>
+
+            <%= render "layouts/articulos/imagenes_articulo_modal" %>
+

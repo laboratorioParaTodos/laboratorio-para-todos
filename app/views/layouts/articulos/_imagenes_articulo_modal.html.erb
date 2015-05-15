@@ -1,0 +1,19 @@
+<% if @articulo %>
+	<div class="modal fade" id="modal_imagenes_articulos" tabindex="-1" role="dialog" aria-labelledby="ModalImagenesArticulosLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+					<h4 class="modal-title">Imágenes disponibles para este tipo de artículo</h4>
+				</div>
+				<div class="modal-body" id="imagenes_articulo">
+				</div>
+				<div class="modal-footer text-center">
+					<%= link_to "Agregar nueva imagen", agregar_imagen_articulo_path(@articulo), class: "btn btn-primary link-white" %>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<% end %>

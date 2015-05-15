@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nombre: MyString
+  modelo: MyString
+  laboratorio_id: 
+  numero_de_serie: MyString
+  numero_de_inventario: MyString
+  numero_de_sep: MyString
+  descripcion: MyText
+  disponible: false
+  motivo: MyText
+  codigo_de_barras: MyString
+
+two:
+  nombre: MyString
+  modelo: MyString
+  laboratorio_id: 
+  numero_de_serie: MyString
+  numero_de_inventario: MyString
+  numero_de_sep: MyString
+  descripcion: MyText
+  disponible: false
+  motivo: MyText
+  codigo_de_barras: MyString

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Imagen:</strong>
+  <%= @imagen_laboratorio.imagen %>
+</p>
+
+<p>
+  <strong>Descripcion:</strong>
+  <%= @imagen_laboratorio.descripcion %>
+</p>
+
+<p>
+  <strong>Laboratorio:</strong>
+  <%= @imagen_laboratorio.laboratorio %>
+</p>
+
+<%= link_to 'Edit', edit_imagen_laboratorio_path(@imagen_laboratorio) %> |
+<%= link_to 'Back', imagen_laboratorios_path %>

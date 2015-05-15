@@ -1,0 +1,17 @@
+<% content_for :titulo do %>
+	Iniciar sesión
+<% end %>
+
+<%= bootstrap_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <%= f.email_field :email, autofocus: true %>
+
+  <%= f.password_field :password, autocomplete: "off", label: "Contraseña" %>
+
+  <% if devise_mapping.rememberable? -%>
+      <%= f.check_box :remember_me, label: "Recuérdame" %>
+  <% end -%>
+
+  <%= f.submit "Iniciar sesión", class: 'center-block btn btn-primary' %>
+<% end %>
+
+<%= render "usuarios/shared/links" %>

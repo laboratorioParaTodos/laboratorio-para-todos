@@ -1,0 +1,5 @@
+<%= bootstrap_form_for(@departamento) do |f| %>
+    <%= f.text_field :nombre %>
+    <%= f.text_area :descripcion, label: 'Descripción' %>
+    <%= f.submit "Guardar", class: 'center-block btn btn-default' %>
+<% end %>

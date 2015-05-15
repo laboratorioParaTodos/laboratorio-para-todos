@@ -1,0 +1,30 @@
+
+<%= form_for(@imagen_laboratorio) do |f| %>
+  <% if @imagen_laboratorio.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@imagen_laboratorio.errors.count, "error") %> prohibited this imagen_laboratorio from being saved:</h2>
+
+      <ul>
+      <% @imagen_laboratorio.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :imagen %><br>
+    <%= f.file_field :imagen %>
+  </div>
+  <div class="field">
+    <%= f.label :descripcion %><br>
+    <%= f.text_area :descripcion %>
+  </div>
+  <div class="field">
+    <%= f.label :laboratorio_id %><br>
+    <%= f.text_field :laboratorio_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
