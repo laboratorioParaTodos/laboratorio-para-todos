@@ -20,7 +20,7 @@
 	</thead>
 	<% @prestamos.each do |p| %>
 		<tr>
-			<td><%= link_to p.prestamista.nombre_completo, p.prestamista%></td>
+			<td><%= link_to p.usuario_prestamo.nombre_completo, p.usuario_prestamo%></td>
 			<td><%= link_to p.articulo.nombre, p.articulo %></td>
 			<td><%= p.fecha_de_prestamo %></td>
 			<td><%= p.fecha_limite %></td>

@@ -48,6 +48,9 @@ Rails.application.routes.draw do
  
   post 'usuarios/prestamo/agregar/:categoria' => 'usuario_prestamos#new', as: :agregar_usuario_prestamo
   
+  devise_scope :usuario do
+    get "/usuarios/sistema" => "usuarios/registrations#index"
+  end
   root 'laboratorios#index'
   
   

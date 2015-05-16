@@ -17,16 +17,19 @@ class LaboratoriosController < ApplicationController
   # GET /laboratorios/new
   def new
     @laboratorio = Laboratorio.new
+    authorize! :crear, @laboratorio
   end
 
   # GET /laboratorios/1/edit
   def edit
+    authorize! :editar, @laboratorio
   end
 
   # POST /laboratorios
   # POST /laboratorios.json
   def create
     @laboratorio = Laboratorio.new(laboratorio_params)
+    authorize! :crear, @laboratorio
     respond_to do |format|
       if @laboratorio.save
         format.html { redirect_to @laboratorio, notice: 'El laboratorio se creó correctamente' }
@@ -36,14 +39,16 @@ class LaboratoriosController < ApplicationController
         format.json { render json: @laboratorio.errors, status: :unprocessable_entity }
       end
     end
+    
   end
 
   # PATCH/PUT /laboratorios/1
   # PATCH/PUT /laboratorios/1.json
   def update
+    authorize! :editar, @laboratorio
     respond_to do |format|
       if @laboratorio.update(laboratorio_params)
-        format.html { redirect_to @laboratorio, notice: 'Laboratorio was successfully updated.' }
+        format.html { redirect_to @laboratorio, notice: 'El laboratorio fue correctamente modificado.' }
         format.json { render :show, status: :ok, location: @laboratorio }
       else
         format.html { render :edit }
@@ -55,6 +60,7 @@ class LaboratoriosController < ApplicationController
   # DELETE /laboratorios/1
   # DELETE /laboratorios/1.json
   def destroy
+    authorize! :eliminar, @laboratorio
     @laboratorio.destroy
     respond_to do |format|
       format.html { redirect_to laboratorios_url, notice: 'El laboratorio fue eliminado correctamente.' }

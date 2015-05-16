@@ -21,8 +21,11 @@
 				<small class="text-white">Laboratorio Para Todos</small>
 			</h1>
 			<% unless  usuario_signed_in? %>
-				<%= button_to 'Iniciar sesión', new_usuario_session_path, class: 'btn btn-primary center-block' %>
-			<% else %>			
+				<%= button_to 'Iniciar sesión', new_usuario_session_path, class: 'btn btn-primary center-block', method: :get %>
+			<% else %>		
+                        <div class="text-center text-white">
+                            <strong><%= link_to current_usuario.nombre_completo, edit_usuario_registration_path, class: 'link-white' %> </strong>
+                        </div>
 				<%= button_to 'Cerrar sesión', destroy_usuario_session_path, class: 'btn btn-primary center-block', method: :delete %>
 			<% end %>
 		</div>
@@ -32,11 +35,6 @@
 	</div>
 	
 	
-	<div class="page-header">
-			<h1 class="text-center text-primary">
-				<%= yield :titulo %>
-			</h1>
-	</div>
 	<div id="menu">
 		<%= button_group class: 'btn-group-justified' do %>
 			<% Laboratorio.all.each do |laboratorio | %>
@@ -53,6 +51,10 @@
 					<li><%= link_to "Ver préstamos registrados", prestamos_registrados_path(laboratorio) %></li>
 					<li><%= link_to "Registrar nuevo préstamo", registrar_prestamo_path(laboratorio)%></li>
 					<li><%= link_to "Cerrar préstamo", prestamos_abiertos_path(laboratorio) %></li>
+                                        <li class="divider"></li>
+                                        <li role="presentation" class="dropdown-header">Usuarios del sistema</li>
+                                        <li><%= link_to "Agregar nuevo usuario", new_usuario_registration_path()%> </li>
+                                        <li><%= link_to "Ver usuarios del sistema", usuarios_sistema_path() %></li>
 					<li class="divider"></li>
 					<li role="presentatino" class="dropdown-header">Administración</li>
 					<li><%= link_to "Carreras", carreras_path %></li>
@@ -62,6 +64,11 @@
 				<% end %>
 			<% end %>
 		<% end %>
+	</div>
+	<div class="page-header">
+			<h1 class="text-center text-primary">
+				<%= yield :titulo %>
+			</h1>
 	</div>
 	<% if notice %>
 		<p class="alert alert-success"><%= notice %></p>

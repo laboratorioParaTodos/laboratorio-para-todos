@@ -59,7 +59,9 @@
       </div>
       <div class="form-group col-sm-4">
           <%= f.static_control label: "Usuario prestamista" do %>
-            <%= @prestamo.usuario.nombre_completo %>
+            <% if @prestamo.usuario %>
+              <%= @prestamo.usuario.nombre_completo %>
+            <% end  %>
           <% end  %>
       </div>		
   </div>

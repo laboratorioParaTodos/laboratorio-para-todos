@@ -2,33 +2,47 @@
   Registrar nuevo préstamo
 
 <% end %>
-<div id="articulos_para_prestamo">	
-    <%= render 'layouts/articulos/articulos_prestamo'%>
-</div>
 
-<div class="text-center">
-    <hr />
-    <%= bootstrap_form_tag url: agregar_articulo_prestamo_path, layout: :inline,  remote: true, form_class: 'text-center' do |f| %>
-      <h4>Agregar artículo por código de barras</h4>
-      <div class="text-center margin-5">
-          <%= f.text_field 'codigo_barras', icon: 'search', autofocus: true %>
-          <%= f.submit 'Buscar por código' %>
+<div class="row">
+    <div class="col-md-4">
+        <h3 class="text-center text-primary">Agregar artículos/usuario</h3>
+        <div class="text-center">
+            <hr />
+            <%= bootstrap_form_tag url: agregar_articulo_prestamo_path, layout: :inline,  remote: true, form_class: 'text-center' do |f| %>
+              <h5>Agregar artículo por código de barras</h5>
+              <div class="text-center margin-5">
+                  <%= f.text_field 'codigo_barras', icon: 'search', autofocus: true, hide_label: true, class: 'input-sm' %>
+                  <%= f.submit 'Buscar por código', class: 'btn btn-default btn-sm' %>
+              </div>
+            <% end %>
+            <%= link_to "Buscar en la página de artículos", articulos_por_laboratorio_path(@laboratorio), class: "btn btn-primary link-white btn-sm"%>
+              <hr />
+
+              <div class="text-center">
+                  <%= bootstrap_form_tag  layout: :inline, method: :get do |f| %>
+                    <h5>Seleccionar usuario del préstamo por código (RFC / No. Control)</h5>
+                    <div class="text-center margin-5"> 		
+                        <%= f.search_field 'id_usuario_prestamo', hide_label: true, icon: "search", value: @id_busqueda_usuario, class: 'input-sm' %>
+                        <%= f.submit "Buscar usuario de préstamo", class: 'btn btn-default btn-sm margin-5' %>
+                    </div>
+                  <% end %>
+              </div>
+
+          </div>
       </div>
-    <% end %>
-    <%= link_to "Buscar en la página de artículos", articulos_por_laboratorio_path(@laboratorio), class: "btn btn-primary link-white"%>
-      <hr />
+
+      <div class="col-sm-8 border-left">
+          <h3 class="text-center text-primary">Datos del préstamo</h3>
+          <div id="articulos_para_prestamo">	
+              <%= render 'layouts/articulos/articulos_prestamo'%>
+          </div>
+          <%= render 'form' %>
+      </div>
   </div>
 
-  <div class="text-center">
-      <%= bootstrap_form_tag  layout: :inline, method: :get do |f| %>
-        <h4>Seleccionar usuario del préstamo por código (RFC / No. Control)</h4>
-        <div class="text-center margin-5"> 		
-            <%= f.search_field 'id_usuario_prestamo', hide_label: true, icon: "search", value: @id_busqueda_usuario %>
-            <%= f.submit "Buscar usuario de préstamo" %>
-        </div>
-      <% end %>
-  </div>
 
-  <%= render 'form' %>
+
+
+
 
   <%= link_to 'Back', prestamos_path %>

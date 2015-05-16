@@ -95,7 +95,6 @@
         <td><%= prestamo.estado.capitalize %></td>
         <td><%= link_to 'Ver préstamo', prestamo, class: 'btn btn-primary link-white' %></td>
         <td><%= link_to 'Editar', edit_prestamo_path(prestamo), class: 'btn btn-default' %></td>
-        <td><%= link_to 'Eliminar', prestamo, method: :delete, data: { confirm: '¿Está seguro que desea eliminar este préstamo?' }, class: 'btn btn-danger link-white' %></td>
       </tr>
     <% end %>
   </tbody>

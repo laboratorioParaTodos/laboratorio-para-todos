@@ -3,7 +3,7 @@
 
   <% if @usuario_prestamo.alumno?  %>
     <%= f.text_field :numero_de_control %>
-    <%= f.select :carrera_id, options_for_select(Carrera.all.map { |c| [c.nombre, c.id ] }, onchange="actualizarForm(this)") %>
+    <%= f.select :carrera_id, options_for_select(Carrera.all.map { |c| [c.nombre, c.id ] }) %>
   <% elsif @usuario_prestamo.profesor? || @usuario_prestamo.personal? %>
     <%= f.text_field :rfc, label: "RFC" %>
     <%= f.select :departamento, options_for_select(Departamento.all.map { |d| [d.nombre, d.id ] }) %>
@@ -12,5 +12,6 @@
   <%= f.text_field :segundo_nombre %>
   <%= f.text_field :apellido_paterno %>
   <%= f.text_field :apellido_materno %>
+  <%= f.check_box :vigente, default: true %>
   <%= f.submit "Guardar", :class => "btn btn-primary center-block" %>
 <% end %>

@@ -4,6 +4,6 @@
 
   <%= f.text_field :nombre %>
   <%= f.text_area :descripcion %>
-  <%= f.select :departamento_id, options_for_select(Departamento.all.map {|d| [d.nombre, d.id]}, @laboratorio.departamento) %>
+  <%= f.select :departamento_id, options_for_select(Departamento.all.map {|d| [d.nombre, d.id]}, @laboratorio.departamento.id) %>
   <%= f.submit "Guardar", :class => 'btn btn-primary center-block' %>
 <% end %>

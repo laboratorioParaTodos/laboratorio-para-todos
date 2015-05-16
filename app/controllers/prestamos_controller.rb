@@ -2,13 +2,14 @@ class PrestamosController < ApplicationController
   before_action :set_prestamo, only: [:show, :edit, :update, :destroy, :cerrar_prestamo]
   before_action :set_laboratorio, only: [:index, :new, :prestamos_abiertos]
   before_action :authenticate_usuario!
+  
   # GET /prestamos
   # GET /prestamos.json
   def index
     @date = Date.today
     @prestamos = @laboratorio.prestamos
     @periodos = {anio: false, mes: false, fecha: false}
-    
+    authorize! :ver, Prestamo.new(articulo: Articulo.new(laboratorio: @laboratorio))
     unless params["todos"]
         if params["periodo(1i)"]
           anio = params["periodo(1i)"].to_i
@@ -48,9 +49,11 @@ class PrestamosController < ApplicationController
   
   def prestamos_abiertos
     @prestamos = @laboratorio.prestamos.where(:estado => Prestamo.estados[:abierto]).order(fecha_de_prestamo: :desc)
+    authorize! :cerrar, Prestamo.new(articulo: Articulo.new(laboratorio: @laboratorio))
   end
   
   def cerrar_prestamo 
+    authorize! :cerrar, @prestamo
     if @prestamo.estado == :cerrado
       redirect_to prestamos_abiertos_path(@prestamo.articulo.laboratorio), alert: "El préstamo ya se encuentra cerrado"
     else 
@@ -70,6 +73,7 @@ class PrestamosController < ApplicationController
   # GET /prestamos/new
   def new
     @prestamo = Prestamo.new  
+    authorize! :crear, Prestamo.new(articulo: Articulo.new(laboratorio: @laboratorio))
     @articulos = @laboratorio.articulos.where(disponible: true)
     if params[:id_usuario_prestamo]
       @id_busqueda_usuario = params[:id_usuario_prestamo]
@@ -84,6 +88,7 @@ class PrestamosController < ApplicationController
   # GET /prestamos/1/edit
   def edit
     @articulos = @prestamo.articulo.laboratorio.articulos.where(disponible: true)
+    authorize! :editar, @prestamo
   end
 
   # POST /prestamos
@@ -104,6 +109,7 @@ class PrestamosController < ApplicationController
             @prestamo.estado = :abierto
             @prestamo.articulo = articulo
             @prestamo.usuario = current_usuario
+            authorize! :crear, @prestamo
             if @prestamo.save           
               articulos_correctos << @prestamo.articulo.id # Eliminar del arreglo de articulos acumulados si se salvo el prestamo
             end
@@ -143,25 +149,15 @@ class PrestamosController < ApplicationController
   # PATCH/PUT /prestamos/1
   # PATCH/PUT /prestamos/1.json
   def update
+    authorize! :editar, @prestamo
     respond_to do |format|
       if @prestamo.update(prestamo_params)
-        format.html { redirect_to @prestamo, notice: 'Prestamo was successfully updated.' }
+        format.html { redirect_to @prestamo, notice: 'El préstamo fue modificado correctamente' }
         format.json { render :show, status: :ok, location: @prestamo }
       else
         format.html { render :edit }
         format.json { render json: @prestamo.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /prestamos/1
-  # DELETE /prestamos/1.json
-  def destroy
-    laboratorio = @prestamo.articulo.laboratorio
-    @prestamo.destroy
-    respond_to do |format|
-      format.html { redirect_to prestamos_registrados_path(laboratorio.id), notice: 'El préstamo fue eliminado correctamente' }
-      format.json { head :no_content }
     end
   end
 

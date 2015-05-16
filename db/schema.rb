@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150514222403) do
+ActiveRecord::Schema.define(version: 20150515010424) do
 
   create_table "articulos", force: true do |t|
     t.string   "nombre"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(version: 20150514222403) do
     t.string   "numero_de_control"
     t.integer  "departamento_id"
     t.string   "rfc",               limit: 16
+    t.boolean  "vigente"
   end
 
   add_index "usuario_prestamos", ["carrera_id"], name: "index_usuario_prestamos_on_carrera_id", using: :btree

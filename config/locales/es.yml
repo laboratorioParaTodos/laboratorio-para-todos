@@ -1,0 +1,6 @@
+## YAML Template.
+---
+activerecord:
+  errors:
+    messages:
+      confirmation: "does not match"

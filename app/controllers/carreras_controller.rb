@@ -1,7 +1,7 @@
 class CarrerasController < ApplicationController
   before_action :set_carrera, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_usuario!
-
+  load_and_authorize_resource :carrera # Solo autorizado para el administrador
   # GET /carreras
   # GET /carreras.json
   def index

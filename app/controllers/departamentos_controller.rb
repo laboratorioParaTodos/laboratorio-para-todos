@@ -1,7 +1,7 @@
 class DepartamentosController < ApplicationController
   before_action :set_departamento, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_usuario!
-
+  load_and_authorize_resource :departamento # Solo autorizado para el administrador
   # GET /departamentos
   # GET /departamentos.json
   def index

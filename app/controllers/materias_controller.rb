@@ -7,6 +7,7 @@ class MateriasController < ApplicationController
   # GET /materias.json
   def index
     @materias = Materia.all
+    authorize! :ver, Materia.new
     if params['carrera']
       if Carrera.exists?(params['carrera'])      
         @materias = Carrera.find(params['carrera']).materias
@@ -14,25 +15,22 @@ class MateriasController < ApplicationController
     end
   end
 
-  # GET /materias/1
-  # GET /materias/1.json
-  def show
-  end
-
   # GET /materias/new
   def new
     @materia = Materia.new
+    authorize! :crear, @materia
   end
 
   # GET /materias/1/edit
   def edit
+    authorize! :editar, @materia
   end
 
   # POST /materias
   # POST /materias.json
   def create
     @materia = Materia.new(materia_params)
-
+    authorize! :crear, @materia
     respond_to do |format|
       if @materia.save
         format.html { redirect_to materias_path, notice: 'La materia fue agregada correctamente' }
@@ -47,6 +45,7 @@ class MateriasController < ApplicationController
   # PATCH/PUT /materias/1
   # PATCH/PUT /materias/1.json
   def update
+    authorize! :editar, @materia
     respond_to do |format|
       if @materia.update(materia_params)
         format.html { redirect_to @materia, notice: 'Materia was successfully updated.' }
@@ -61,6 +60,7 @@ class MateriasController < ApplicationController
   # DELETE /materias/1
   # DELETE /materias/1.json
   def destroy
+    authorize! :eliminar, @materia
     @materia.destroy
     respond_to do |format|
       format.html { redirect_to materias_url, notice: 'Materia was successfully destroyed.' }

@@ -1,34 +1,48 @@
 <% content_for :titulo do %>
-Detalles de usuario de préstamo
+  Detalles de usuario de préstamo
 <% end %>
 
 <div >
-	<%= image_tag "aplicacion/usuario.PNG", class: 'center-block img-responsive imagen-usuario'%>
+  <%= image_tag "aplicacion/usuario.PNG", class: 'center-block img-responsive imagen-usuario'%>
 </div>
+  
 <div>
-	<h3 class="text-center"><%= @usuario_prestamo.nombre_completo %></h3>
+  <h3 class="text-center"><%= @usuario_prestamo.nombre_completo %></h3>
 </div>
+  
 <h4 class="text-center text-primary">Tipo de usuario</h4>
 <p class="text-center">
-	<%= @usuario_prestamo.categoria.capitalize %>
+  <%= @usuario_prestamo.categoria.capitalize %>
 </p>
 
 <% unless @usuario_prestamo.numero_de_control.nil? %>
-	<h4 class="text-center text-primary">Número de control</h4>
-	<p class="text-center">
-		<%= @usuario_prestamo.numero_de_control %>
-	</p>
+  <h4 class="text-center text-primary">Número de control</h4>
+  <p class="text-center">
+    <%= @usuario_prestamo.numero_de_control %>
+  </p>
 <% end %>
 
-<% unless @usuario_prestamo.carrera.nil? %>
-	<h4 class="text-center text-primary">Carrera</h4>
-	<p class="text-center">
-		<%= @usuario_prestamo.carrera.nombre %>
-	</p>
+<% if @usuario_prestamo.alumno? && !@usuario_prestamo.carrera.nil?  %>
+  <h4 class="text-center text-primary">Carrera</h4>
+  <p class="text-center">
+    <%= @usuario_prestamo.carrera.nombre %>
+  </p>
+<% elsif (@usuario_prestamo.profesor? || @usuario_prestamo.personal?) && !@usuario_prestamo.departamento.nil?%>
+  <h4 class="text-center text-primary">Departamento</h4>
+  <p class="text-center">
+    <%= @usuario_prestamo.departamento.nombre %>
+  </p>
 <% end %>
+  
+<% if @usuario_prestamo.vigente? %>
+  <p class="text-success text-center"><strong>Vigente</strong></p>
+<% else %>
+  <p class="text-danger text-center"><strong>No vigente</strong></strong>
+<% end %>
+
 
 <div class="text-center">	
-	<%= link_to 'Modificar usuario de préstamo', edit_usuario_prestamo_path(@usuario_prestamo), class: 'btn btn-default' %>
-	<%= link_to "Eliminar usuario de préstamo", @usuario_prestamo, method: :delete, class: 'btn btn-danger link-white', data: {confirm: "¿Está seguro de eliminar a este usuario? Este acción es irreversible."} %>
+  <%= link_to 'Modificar usuario de préstamo', edit_usuario_prestamo_path(@usuario_prestamo), class: 'btn btn-default' %>
+  <%= link_to "Eliminar usuario de préstamo", @usuario_prestamo, method: :delete, class: 'btn btn-danger link-white', data: {confirm: "¿Está seguro de eliminar a este usuario? Este acción es irreversible."} %>
 </div>
 

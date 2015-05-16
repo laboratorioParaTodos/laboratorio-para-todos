@@ -16,12 +16,14 @@ class ArticulosController < ApplicationController
       @total_por_grupos = @laboratorio.articulos.group(:nombre, :modelo).order(:id => :desc).count
       @agrupado = true
     end
+    authorize! :ver, Articulo.new(laboratorio: @laboratorio)
     
   end
 
   # GET /articulos/1
   # GET /articulos/1.json
   def show
+    authorize! :ver, @articulo
      @imagenes_articulo = @articulo.buscar_imagenes
      @laboratorio = @articulo.laboratorio
   end
@@ -33,6 +35,7 @@ class ArticulosController < ApplicationController
       @laboratorio = Laboratorio.find(params[:id_laboratorio])
       @articulo.laboratorio = @laboratorio
     end
+    authorize! :crear, @articulo
     if params[:codigo_de_barras]
       begin
         @codigo_barras = params[:codigo_de_barras]
@@ -51,12 +54,14 @@ class ArticulosController < ApplicationController
 
   # GET /articulos/1/edit
   def edit
+    authorize! :editar, @articulo
   end
 
   # POST /articulos
   # POST /articulos.json
   def create
     @articulo = Articulo.new(articulo_params)
+    authorize! :crear, @articulo
     unless(@articulo.buscar_imagen.nil?)
       @articulo.imagen_articulo = @articulo.buscar_imagen
     end
@@ -85,7 +90,9 @@ class ArticulosController < ApplicationController
   # PATCH/PUT /articulos/1
   # PATCH/PUT /articulos/1.json
   def update
+    authorize! @articulo, :editar
     respond_to do |format|
+      authorize! @articulo, :editar
       if @articulo.update(articulo_params)
         format.html { redirect_to @articulo, notice: 'El artículo fue modificado correctamente' }
         format.json { render :show, status: :ok, location: @articulo }
@@ -99,6 +106,7 @@ class ArticulosController < ApplicationController
   # DELETE /articulos/1
   # DELETE /articulos/1.json
   def destroy
+    authorize! @articulo, :eliminar
     laboratorio = @articulo.laboratorio
     @articulo.destroy
     respond_to do |format|
@@ -108,6 +116,7 @@ class ArticulosController < ApplicationController
   end
   
   def asignar_imagen
+    authorize! :crear, @articulo
     imagen = ImagenArticulo.find(params[:id_imagen])
     articulo = Articulo.find(params[:id_articulo])
     articulo.imagen_articulo = imagen
@@ -117,6 +126,7 @@ class ArticulosController < ApplicationController
   end
   
   def agregar_a_prestamo
+    
     if params[:id] 
       id = params[:id]
     else
@@ -124,6 +134,7 @@ class ArticulosController < ApplicationController
         id = Articulo.buscar_por_codigo(params["codigo_barras"]).id.to_s
       end
     end
+    @laboratorio = Articulo.find(id).laboratorio
     if cookies[:articulos_para_prestamo] 
       articulos_para_prestamo = JSON.parse(cookies[:articulos_para_prestamo])
       if (articulos_para_prestamo.index(id).nil?) ## no se encuentra agregadp
@@ -134,7 +145,7 @@ class ArticulosController < ApplicationController
       articulos_para_prestamo = [id.to_s]
       cookies[:articulos_para_prestamo] = JSON.generate(articulos_para_prestamo)
     end
-    @laboratorio = Articulo.find(id).laboratorio
+    
   end
   
   def eliminar_de_prestamo

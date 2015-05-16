@@ -1,0 +1,32 @@
+<% content_for :titulo do %>
+  Usuarios del sistema registrados
+<% end  %>
+
+<table class="table table table-striped table-hover">
+    <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Laboratorio</th>
+        <th>Rol</th>
+    </tr>
+    <% @usuarios.each do |u| %>
+      <tr>
+          <td><%= u.nombre_completo %></td>
+          <td><%= u.email %></td>
+          <td>
+              <% if u.laboratorio %>
+                <%= u.laboratorio.nombre %>
+              <% end %>
+          </td>
+          <td>
+              <% if u.rol %>
+                <%= u.rol.to_s.capitalize.gsub("_", " ") %>
+              <% end  %>
+          </td>
+      </tr>
+    <% end  %>
+</table>
+
+<div class="text-center">
+    <%= link_to "Agregar nuevo usuario de sistema", new_usuario_registration_path(), class: 'btn btn-primary link-white'%>
+</div>

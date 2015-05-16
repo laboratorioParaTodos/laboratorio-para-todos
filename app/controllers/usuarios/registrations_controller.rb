@@ -7,12 +7,15 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/sign_up
   def new
-     super
   end
 
   # POST /resource
   def create
-    super
+  end
+  
+  def index
+    authorize! :ver, Usuario.new
+    @usuarios = Usuario.all.order(:laboratorio_id)
   end
 
   # GET /resource/edit
