@@ -50,3 +50,9 @@ gem 'searchkick' # Gema para busquedas
 gem 'barby', '~> 0.6.2' # Gema para generar codigo de barras
 gem 'devise', '~> 3.4.1'
 gem "cancan"
+gem 'prawn', '~> 2.0.1' # Escritor pdf
+gem 'prawn-table', '~> 0.2.1'
+gem 'prawn-rails', '~> 0.1.1'
+gem 'axlsx_rails', '~> 0.3.0' # Reportes a excel
+gem 'jasny-bootstrap-rails' # 
+gem 'font-awesome-rails', '~> 4.3.0.0' # Libreria para iconos

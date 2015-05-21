@@ -1,5 +1,5 @@
 class ArticulosController < ApplicationController
-  before_action :set_articulo, only: [:show, :edit, :update, :destroy]
+  before_action :set_articulo, only: [:show, :edit, :update, :destroy, :descargar_codigo]
   before_action :authenticate_usuario!, except: [:index, :show]
 
   # GET /articulos
@@ -17,15 +17,27 @@ class ArticulosController < ApplicationController
       @agrupado = true
     end
     authorize! :ver, Articulo.new(laboratorio: @laboratorio)
-    
+    respond_to do |format|
+      format.xlsx {
+        #render template: "layouts/reportes/articulos/articulos_registrados", xlsx: "articulos_laboratorio_" + @laboratorio.nombre.downcase + "_" + Time.now.strftime("%d/%m/%Y")
+        render xlsx: "articulos_registrados", template: "layouts/reportes/articulos/articulos_registrados", filename: "articulos_laboratorio_" + @laboratorio.nombre.downcase + "_" + Time.now.strftime("%d/%m/%Y")
+      }
+      format.html 
+    end
   end
-
+  
   # GET /articulos/1
   # GET /articulos/1.json
   def show
     authorize! :ver, @articulo
-     @imagenes_articulo = @articulo.buscar_imagenes
-     @laboratorio = @articulo.laboratorio
+    @imagenes_articulo = @articulo.buscar_imagenes
+    @laboratorio = @articulo.laboratorio
+    respond_to do |format|
+      format.xlsx {
+         render xlsx: "articulo", template: "layouts/reportes/articulos/articulo", filename: "Articulo_" + @articulo.nombre + "_" + @articulo.modelo + Time.now.strftime("%d/%m/%Y")
+      }
+      format.html
+    end
   end
 
   # GET /articulos/new
@@ -90,9 +102,8 @@ class ArticulosController < ApplicationController
   # PATCH/PUT /articulos/1
   # PATCH/PUT /articulos/1.json
   def update
-    authorize! @articulo, :editar
+    authorize! :editar, @articulo
     respond_to do |format|
-      authorize! @articulo, :editar
       if @articulo.update(articulo_params)
         format.html { redirect_to @articulo, notice: 'El artículo fue modificado correctamente' }
         format.json { render :show, status: :ok, location: @articulo }
@@ -106,7 +117,7 @@ class ArticulosController < ApplicationController
   # DELETE /articulos/1
   # DELETE /articulos/1.json
   def destroy
-    authorize! @articulo, :eliminar
+    authorize! :eliminar, @articulo
     laboratorio = @articulo.laboratorio
     @articulo.destroy
     respond_to do |format|
@@ -161,6 +172,12 @@ class ArticulosController < ApplicationController
     end
     render 'articulos/agregar_a_prestamo'
   end
+  
+  def descargar_codigo
+    @articulo.generar_codigo_barras
+    redirect_to "/codigo_barras_"  + @articulo.laboratorio.id.to_s + ".pdf"
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_articulo

@@ -1,9 +1,7 @@
 <% content_for :titulo do %>
 	Registrar nuevo usuario
-<% end %>
-
-
-<%= bootstrap_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+<% end %> 
+<%= bootstrap_form_for(@usuario, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= f.alert_message "Por favor corrija lo siguientes errores." %>
 
   <%= f.email_field :email, autofocus: true %>
@@ -14,16 +12,15 @@
   <%= f.password_field :password, autocomplete: "off", label: "Contraseña" %>
 
   <%= f.password_field :password_confirmation, autocomplete: "off", label: "Confirmación de contraseña" %>
+  <% if @usuario.laboratorio then laboratorio_id = @usuario.laboratorio.id else laboratorio_id = nil end %>
+  <%= f.select :laboratorio_id, options_for_select(@laboratorios.map { |l| [l.nombre, l.id]}, laboratorio_id )%>
   
-  <%= f.select :laboratorio_id, options_for_select(Laboratorio.all.map {|l| [l.nombre, l.id]})%>
   <%= f.text_field :nombre %>
   <%= f.text_field :apellido_paterno %>
   <%= f.text_field :apellido_materno %>
   
-  <%= f.select :rol, options_for_select(Usuario.roles.keys.map {|key| [key.to_s.capitalize.sub("_", " "), key]})%>
+  <%= f.select :rol, options_for_select(@roles.map { |r| [r[0].capitalize.gsub("_", " "), r[0]]})%>
   
-  <%= f.submit "Registrar usuario" %>
+  <%= f.submit "Guardar", class: 'btn btn-primary center-block' %>
 
 <% end %>
-
-<%= render "usuarios/shared/links" %>

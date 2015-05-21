@@ -42,7 +42,11 @@
 
 
 <div class="text-center">	
-  <%= link_to 'Modificar usuario de préstamo', edit_usuario_prestamo_path(@usuario_prestamo), class: 'btn btn-default' %>
-  <%= link_to "Eliminar usuario de préstamo", @usuario_prestamo, method: :delete, class: 'btn btn-danger link-white', data: {confirm: "¿Está seguro de eliminar a este usuario? Este acción es irreversible."} %>
+	<% if can? :editar, @usuario_prestamo %>
+  		<%= link_to 'Modificar usuario de préstamo', edit_usuario_prestamo_path(@usuario_prestamo), class: 'btn btn-default' %>
+  	<% end %>
+  	<% if can? :eliminar, @usuario_prestamo %>
+  		<%= link_to "Eliminar usuario de préstamo", @usuario_prestamo, method: :delete, class: 'btn btn-danger link-white', data: {confirm: "¿Está seguro de eliminar a este usuario? Este acción es irreversible."} %>
+	<% end %>
 </div>
 

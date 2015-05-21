@@ -1,4 +1,11 @@
 class Articulo < ActiveRecord::Base
+  require 'barby'
+  require 'barby/barcode/code_128'
+  require 'barby/outputter/ascii_outputter'
+  require 'barby/outputter/html_outputter'
+  require 'prawn'
+  require 'barby/outputter/prawn_outputter'
+
   belongs_to :laboratorio
   belongs_to :imagen_articulo
   
@@ -45,6 +52,19 @@ class Articulo < ActiveRecord::Base
     Articulo.new(nombre: articulo.nombre, modelo: articulo.modelo, laboratorio: articulo.laboratorio,
      numero_de_inventario: articulo.numero_de_inventario, numero_de_sep: articulo.numero_de_sep, 
      descripcion: articulo.descripcion, imagen_articulo: articulo.imagen_articulo, disponible: true)
+  end
+  
+  def generar_codigo_barras
+    barcode = Barby::Code128B.new(obtener_codigo_barras)
+    outputter = Barby::PrawnOutputter.new(barcode)
+    pdf = Prawn::Document.new
+    pdf.define_grid(:columns => 5, :rows => 8, :gutter => 10)
+    pdf.text_box nombre + "-" + modelo, :at => [1, 700], :width => 170, :align => :center
+    pdf.text_box obtener_codigo_barras, :at => [1, 590], :width => 170,
+    :align => :center
+    barcode.annotate_pdf(pdf, x: 1, y: 600)
+    pdf.render_file "public/codigo_barras_" + laboratorio.id.to_s + ".pdf"
+    return ""
   end
   
 end

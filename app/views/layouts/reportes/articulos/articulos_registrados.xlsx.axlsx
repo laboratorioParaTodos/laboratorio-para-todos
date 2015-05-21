@@ -1,0 +1,13 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Artículos") do |sheet|
+  titulo_tabla = sheet.styles.add_style(:bg_color => "E6E6E6", :fg_color=>"000000", :sz=>12, :alignment=>{:horizontal => :center}, :b => true)
+  titulo = sheet.styles.add_style(:sz=>16, :alignment=>{:horizontal => :center})
+  sheet.merge_cells "A1:G1"
+  sheet.add_row ["Artículos del laboratorio de " + @laboratorio.nombre], style: titulo
+  sheet.add_row
+  sheet.add_row ["Nombre", "Modelo/Marca", "Número de serie", "Número de SEP", "Descripción", "Disponibilidad", "Motivo", "Código de barras"], :style => titulo_tabla
+  @articulos.each do |articulo|
+    sheet.add_row [articulo.nombre, articulo.modelo, articulo.numero_de_serie, articulo.numero_de_sep, articulo.descripcion,  if articulo.disponible? then "Disponible" else "No disponible" end, articulo.motivo, articulo.obtener_codigo_barras]
+  end
+end

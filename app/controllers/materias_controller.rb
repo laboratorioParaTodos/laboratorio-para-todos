@@ -18,6 +18,10 @@ class MateriasController < ApplicationController
   # GET /materias/new
   def new
     @materia = Materia.new
+    if params[:id_laboratorio] && Laboratorio.exists?(params[:id_laboratorio])
+      @laboratorio = Laboratorio.find(params[:id_laboratorio])
+      @materia.carrera = Carrera.new(departamento: @laboratorio.departamento)
+    end
     authorize! :crear, @materia
   end
 

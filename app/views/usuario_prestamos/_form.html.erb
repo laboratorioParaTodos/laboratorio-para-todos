@@ -1,12 +1,14 @@
 <%= bootstrap_form_for(@usuario_prestamo) do |f| %>
-  <%= f.select :categoria, options_for_select(UsuarioPrestamo.categorias.map { |c| [c.first.capitalize, c.first]}, @usuario_prestamo.categoria), label: 'Categoría' %>
-
+  <%= f.static_control label: "Categoría" do %>
+    <%= @usuario_prestamo.categoria.capitalize %>
+  <% end %>
+  <%= f.hidden_field :categoria  %>
   <% if @usuario_prestamo.alumno?  %>
     <%= f.text_field :numero_de_control %>
     <%= f.select :carrera_id, options_for_select(Carrera.all.map { |c| [c.nombre, c.id ] }) %>
   <% elsif @usuario_prestamo.profesor? || @usuario_prestamo.personal? %>
     <%= f.text_field :rfc, label: "RFC" %>
-    <%= f.select :departamento, options_for_select(Departamento.all.map { |d| [d.nombre, d.id ] }) %>
+    <%= f.select :departamento_id, options_for_select(Departamento.all.map { |d| [d.nombre, d.id ] }) %>
   <% end %>
   <%= f.text_field :primer_nombre %>
   <%= f.text_field :segundo_nombre %>
@@ -14,4 +16,5 @@
   <%= f.text_field :apellido_materno %>
   <%= f.check_box :vigente, default: true %>
   <%= f.submit "Guardar", :class => "btn btn-primary center-block" %>
+<a href="_form.html.erb"></a>
 <% end %>

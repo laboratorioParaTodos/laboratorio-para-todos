@@ -3,9 +3,9 @@
 </div>
 <div class="text-center">
 	<%= bootstrap_form_tag  method: :get, layout: :inline do |f| %>
-		<h3>Llenar datos por código de artículo existente</h3>
+		<h3>Llenar datos por código de artículo existente<br /></h3>
 		<%= f.search_field 'codigo_de_barras', label: 'Código de barras',value: @codigo_barras%>
-		<%= f.submit 'Agregar por código', icon: :search%>
+		<%= f.submit raw('Agregar por código'), icon: :search%>
 	<% end %>
 </div>
 <hr/>

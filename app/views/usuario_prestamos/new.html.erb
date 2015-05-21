@@ -1,7 +1,19 @@
-<div class="page-header">
-	<h1 class="text-primary text-center">Agregar usuario de préstamo</h1>
-</div>
+<% content_for :titulo do %>
+	Agregar <%= @usuario_prestamo.categoria %>
+<% end %>
 
+<div class="text-center">
+      <% unless @usuario_prestamo.alumno? %>
+        <%= link_to "Agregar alumno", agregar_usuario_prestamo_path(:alumno), class: 'btn btn-default' %>
+      <% end  %>
+      <% unless @usuario_prestamo.profesor? %>
+        <%= link_to "Agregar profesor", agregar_usuario_prestamo_path(:profesor), class: 'btn btn-default' %>
+      <% end %>
+      <% unless @usuario_prestamo.personal? %>
+        <%= link_to "Agregar personal", agregar_usuario_prestamo_path(:personal), class: 'btn btn-default' %>
+      <% end %>
+    <hr />
+</div>
 <%= render 'form' %>
 
 <%= link_to 'Ver usuarios de préstamos', usuario_prestamos_path %>

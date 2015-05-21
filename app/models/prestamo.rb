@@ -2,7 +2,7 @@ class Prestamo < ActiveRecord::Base
   # Asociaciones
   belongs_to :usuario_prestamo
   belongs_to :articulo
-  belongs_to :profesor_encargado, class_name: "Prestamista"
+  belongs_to :profesor_encargado, class_name: "UsuarioPrestamo"
   belongs_to :materia
   belongs_to :usuario
   enum estado: [:abierto, :cerrado]

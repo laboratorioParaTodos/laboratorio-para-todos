@@ -39,28 +39,72 @@
 		<%= button_group class: 'btn-group-justified' do %>
 			<% Laboratorio.all.each do |laboratorio | %>
 				<%= bs_dropdown_button_to laboratorio.nombre, class: 'btn-primary' do %>
+					<% prestamo_prueba = Prestamo.new(articulo: Articulo.new(laboratorio: laboratorio)) %>
+					<% articulo_prueba = Articulo.new(laboratorio: laboratorio) %>
+					<% usuario_prestamo_prueba = UsuarioPrestamo.new %>
+					<% usuario_prueba = Usuario.new(laboratorio: laboratorio, rol: :encargado_laboratorio) %>
+					<% materia_prueba = Materia.new(carrera: Carrera.new(departamento: laboratorio.departamento ))%>
+					<li role="presentation" class="dropdown-header">Laboratorio</li>
+					<li><%= link_to "Información del laboratorio", laboratorio %></li>
 					<li role="presentation" class="dropdown-header ">Artículos</li>
-					<li><%= link_to "Agregar artículo", agregar_nuevo_articulo_path(laboratorio)  %></li>
+					<% if can? :crear, articulo_prueba %>
+						<li><%= link_to "Agregar artículo", agregar_nuevo_articulo_path(laboratorio)  %></li>
+					<% end %>
 					<li><%= link_to "Ver artículos", articulos_por_laboratorio_path(laboratorio) %></li>
-					<li class="divider"></li>
-					<li role="presentation" class="dropdown-header ">Usuarios de préstamos</li>
-					<li><%= link_to "Ver usuarios de préstamos", usuario_prestamos_path %></li>
-					<li><%= link_to "Agregar usuario de préstamos", new_usuario_prestamo_path %></li>
-					<li class="divider"></li>
-					<li role="presentation" class="dropdown-header ">Préstamos</li>
-					<li><%= link_to "Ver préstamos registrados", prestamos_registrados_path(laboratorio) %></li>
-					<li><%= link_to "Registrar nuevo préstamo", registrar_prestamo_path(laboratorio)%></li>
-					<li><%= link_to "Cerrar préstamo", prestamos_abiertos_path(laboratorio) %></li>
-                                        <li class="divider"></li>
-                                        <li role="presentation" class="dropdown-header">Usuarios del sistema</li>
-                                        <li><%= link_to "Agregar nuevo usuario", new_usuario_registration_path()%> </li>
-                                        <li><%= link_to "Ver usuarios del sistema", usuarios_sistema_path() %></li>
-					<li class="divider"></li>
-					<li role="presentatino" class="dropdown-header">Administración</li>
-					<li><%= link_to "Carreras", carreras_path %></li>
-					<li><%= link_to "Departamentos", departamentos_path %></li>
-					<li><%= link_to "Materias", materias_path %></li>
-					<li><%= link_to "Personalización" %></li>
+					
+					<% if can?(:ver, usuario_prestamo_prueba) || can?(:crear, usuario_prestamo_prueba) %>
+						<li class="divider"></li>
+						<li role="presentation" class="dropdown-header ">Usuarios de préstamos</li>
+						<% if can? :ver, UsuarioPrestamo.new %>
+							<li><%= link_to "Ver usuarios de préstamos", usuario_prestamos_path %></li>
+						<% end %>
+						<% if can? :crear, UsuarioPrestamo.new %>
+							<li><%= link_to "Agregar usuario de préstamos", new_usuario_prestamo_path %></li>
+						<% end %>
+					<% end %>
+					
+					<% if can?(:ver, prestamo_prueba) || can?(:crear, prestamo_prueba) || can?(:cerrar, prestamo_prueba) %>
+						<li class="divider"></li>
+						<li role="presentation" class="dropdown-header ">Préstamos</li>
+						<% if can? :ver, prestamo_prueba%>
+							<li><%= link_to "Ver préstamos registrados", prestamos_registrados_path(laboratorio) %></li>
+						<% end %>
+						<% if can? :crear, prestamo_prueba %>
+							<li><%= link_to "Registrar nuevo préstamo", registrar_prestamo_path(laboratorio)%></li>
+						<% end %>
+						<% if can? :cerrar, prestamo_prueba %>
+							<li><%= link_to "Cerrar préstamo", prestamos_abiertos_path(laboratorio) %></li>
+						<% end %>
+					<% end %>
+                    
+                  	<% if can?(:crear, usuario_prueba) || can?(:ver, usuario_prueba) %>
+	                    <li class="divider"></li>
+	                    <li role="presentation" class="dropdown-header">Usuarios del sistema</li>
+	                    <% if can? :crear, usuario_prueba%>
+	                    	<li><%= link_to "Agregar nuevo usuario", registrar_usuario_sistema_path(laboratorio)%> </li>
+	                    <% end %>
+	                    <% if can? :ver, usuario_prueba %>
+	                    	<li><%= link_to "Ver usuarios del sistema", usuarios_sistema_laboratorio_path(laboratorio) %></li>
+	                    <% end %>
+                    <% end %>
+                    
+                    <% if can?(:manage, Carrera.new) || can?(:manage, Departamento.new) || can?(:ver, materia_prueba) %>
+						<li class="divider"></li>
+						<li role="presentation" class="dropdown-header">Administración</li>
+						<% if can? :manage, Carrera.new %>
+							<li><%= link_to "Carreras", carreras_path %></li>
+						<% end %>
+						<% if can? :manage, Departamento.new %>
+							<li><%= link_to "Departamentos", departamentos_path %></li>
+						<% end %>
+						<% if can? :ver, materia_prueba %>
+							<li><%= link_to "Materias", registrar_materia_path(laboratorio.id) %></li>
+						<% end%>
+						
+						<% if can?(:manage, :all) && false %>
+							<li><%= link_to "Personalización" %></li>
+						<% end %>
+					<% end %>
 				<% end %>
 			<% end %>
 		<% end %>

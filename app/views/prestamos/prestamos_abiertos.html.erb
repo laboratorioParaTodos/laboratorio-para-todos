@@ -9,7 +9,7 @@
 <table class="table table-striped table-hover">
 	<thead>
 	   <tr>
-	      <th>Prestamista</th>
+	      <th>Usuario préstamo</th>
 	      <th>Articulo</th>
 	      <th>Fecha de prestamo</th>
 	      <th>Fecha limite</th>
@@ -19,7 +19,7 @@
 	   </tr>
 	</thead>
 	<% @prestamos.each do |p| %>
-		<tr>
+		<tr class="<%= if p.fecha_limite < Date.today then "danger" elsif p.fecha_limite == Date.today then "warning" end %>">
 			<td><%= link_to p.usuario_prestamo.nombre_completo, p.usuario_prestamo%></td>
 			<td><%= link_to p.articulo.nombre, p.articulo %></td>
 			<td><%= p.fecha_de_prestamo %></td>

@@ -1,0 +1,21 @@
+<% content_for :titulo do %>
+	Modificar usuario
+<% end %>
+
+<%= bootstrap_form_for(@usuario,url: actualizar_usuario_path(@usuario)) do |f| %>
+  <%= f.alert_message "Por favor corrija lo siguientes errores." %>
+
+  <%= f.email_field :email, autofocus: true %>
+
+ <% if @usuario.laboratorio then laboratorio_id = @usuario.laboratorio.id else laboratorio_id = nil end %>
+  <%= f.select :laboratorio_id, options_for_select(@laboratorios.map { |l| [l.nombre, l.id]}, laboratorio_id )%>
+  
+  <%= f.text_field :nombre %>
+  <%= f.text_field :apellido_paterno %>
+  <%= f.text_field :apellido_materno %>
+  
+  <%= f.select :rol, options_for_select(@roles.map { |r| [r[0].capitalize.gsub("_", " "), r[0]]}, @usuario.rol)%>
+  
+  <%= f.submit "Guardar", class: 'btn btn-primary center-block' %>
+
+<% end %>

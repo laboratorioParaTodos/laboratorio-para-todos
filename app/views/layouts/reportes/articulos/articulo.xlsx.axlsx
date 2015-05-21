@@ -1,0 +1,21 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: @articulo.nombre + "-" + @articulo.modelo) do |sheet|
+  campo = sheet.styles.add_style(:sz=>12, :b => true)
+  titulo = sheet.styles.add_style(:sz=>16, :alignment=>{:horizontal => :center})
+  sheet.merge_cells "A1:G1"
+  sheet.add_row ["Datos del artículo: " + @articulo.nombre], style: titulo
+  sheet.add_row
+  sheet.add_row ["Nombre", @articulo.nombre], style: [campo, nil]
+  sheet.add_row ["Modelo", @articulo.modelo], style: [campo, nil]
+  sheet.add_row ["Número de serie", @articulo.numero_de_serie], style: [campo, nil]
+  sheet.add_row ["Número de SEP", @articulo.numero_de_sep], style: [campo, nil]
+  sheet.add_row ["Laboratorio", @articulo.laboratorio.nombre], style: [campo, nil]
+  sheet.add_row ["Descripción", @articulo.descripcion], style: [campo, nil]
+  sheet.add_row ["Disponibilidad", if @articulo.disponible? then "Disponible" else "No disponible" end], style: [campo, nil]
+  sheet.add_row ["Motivo", @articulo.motivo], style: [campo, nil]
+  sheet.add_row ["Código de barras", @articulo.obtener_codigo_barras], style: [campo, nil]
+  img = File.expand_path(@articulo.imagen_articulo.imagen.current_path, __FILE__)
+      sheet.add_image(:image_src => img, :start_at => [3, 2], width: 200, height: 200, :noSelect => true, :noMove => true)
+
+end

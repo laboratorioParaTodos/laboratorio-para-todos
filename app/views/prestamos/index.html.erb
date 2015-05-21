@@ -76,7 +76,7 @@
 
   <tbody>
     <% @prestamos.each do |prestamo| %>
-      <tr>
+      <tr class="<%= if prestamo.fecha_de_devolucion.nil? then "warning" elsif  prestamo.fecha_limite < prestamo.fecha_de_devolucion then "danger" end %>">
         <td><%= prestamo.usuario_prestamo.nombre_completo %></td>
         <td><%= prestamo.articulo.nombre %></td>
         <td><%= prestamo.fecha_de_prestamo %></td>

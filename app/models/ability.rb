@@ -3,16 +3,15 @@ class Ability
 
   def initialize(usuario)
     usuario ||= Usuario.new
-    alias_action :crear, :editar, :ver, :eliminar, :to => :gestionar
+    alias_action :crear, :editar, :ver, :eliminar, :generar_codigo, :to => :gestionar
     
     if usuario.administrador?
       can :manage, :all # Privilegios totales
     else
       can :ver, [Articulo, Laboratorio] # Privilegio para todos los usuarios
-      
       if usuario.encargado_laboratorio? || usuario.jefe_laboratorio? || usuario.jefe_departamento?
         # Privilegios que comparten el encargado de laboratorio, jefe de laboratorio y el jefe de departamento
-        can :crear, Articulo, :laboratorio_id => usuario.laboratorio.id
+        can [:crear, :generar_codigo], Articulo, :laboratorio_id => usuario.laboratorio.id
         can [:crear, :ver], UsuarioPrestamo
         can [:crear, :cerrar, :editar], Prestamo, :articulo => { :laboratorio_id => usuario.laboratorio.id }
         can :ver, Prestamo, :articulo => { :laboratorio_id => usuario.laboratorio.id }
@@ -22,15 +21,25 @@ class Ability
           can :gestionar, Articulo, :laboratorio_id => usuario.laboratorio.id
           can :gestionar, UsuarioPrestamo
           can :gestionar, Prestamo, :articulo => { :laboratorio_id => usuario.laboratorio.id }
-          can :gestionar, Materia, :carrera => { :departamento_id => usuario.laboratorio.departamento.id }
-          can :gestionar, Usuario, :rol => [:encargado_laboratorio, :jefe_laboratorio]
+          can :agregar, Usuario # Permiso para acceder a la venta agregar
+          can :gestionar, Usuario, {:rol => ["encargado_laboratorio", "jefe_laboratorio"], :laboratorio_id => usuario.laboratorio.id}
+          can :ver, Usuario, :laboratorio_id => usuario.laboratorio.id
           can :eliminar, ImagenArticulo
-        
-          if usuario.jefe_departamento
+          can :editar, Laboratorio, :id => usuario.laboratorio.id
+          if usuario.jefe_laboratorio?
+            cannot [:editar, :eliminar], Usuario, :rol => ["jefe_laboratorio"]
+          end
+          
+          if usuario.jefe_departamento?
             # Privilegios exclusivos para el jefe de departamento
             can :gestionar, Articulo, :laboratorio_id => usuario.laboratorio.departamento.laboratorios_id
+            can :cerrar, Prestamo, :articulo => { :laboratorio_id => usuario.laboratorio.departamento.laboratorios_id }
             can :gestionar, Prestamo, :articulo => { :laboratorio_id => usuario.laboratorio.departamento.laboratorios_id }
-            can :gestionar, Usuario, :rol => [ :jefe_laboratorio ]
+            can :gestionar, Usuario, :rol => [ "encargado_laboratorio", "jefe_laboratorio", "jefe_departamento"], :laboratorio_id => usuario.laboratorio.departamento.laboratorios_id 
+            can :gestionar, Laboratorio, :id => usuario.laboratorio.departamento.laboratorios_id
+            
+            can :gestionar, Materia, :carrera => { :departamento_id => usuario.laboratorio.departamento.id }
+            cannot [:editar, :eliminar],Usuario, :rol => "jefe_departamento"
           end
           
         end

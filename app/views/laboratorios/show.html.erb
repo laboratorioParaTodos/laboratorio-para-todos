@@ -29,7 +29,7 @@
 					<div class="item">
 						<%= image_tag imagen.imagen.url, class: 'img-slide' %>
 						<div class="carousel-caption">
-							<%= imagen.descripcion %>
+							<h3><%= imagen.descripcion %></h3>
 						</div>
 					</div>
 				<% end %>
@@ -55,15 +55,15 @@
 	<div class="alert alert-info">No se encontraron imágenes del laboratorio</div>
 <% end %>
 
-<p class="text-center">
+<p class="text-center lead">
 	<%= @laboratorio.descripcion %>
 </p>
 <div class="text-center">
-	
+	 
 	<%= link_to 'Artículos de este laboratorio', articulos_por_laboratorio_path(@laboratorio.id), class: 'btn btn-primary text-center link-white' %>
-	<%= link_to 'Editar imagenes del laboratorio', imagenes_por_laboratorio_path(@laboratorio), class: 'btn btn-default text-center ' %>
-	<%= link_to 'Editar información del laboratorio', edit_laboratorio_path(@laboratorio), class: 'btn btn-default text-center ' %>
-
+	
+        <% if can? :editar, @laboratorio %>
+          <%= link_to 'Editar imagenes del laboratorio', imagenes_por_laboratorio_path(@laboratorio), class: 'btn btn-default text-center ' %>	
+          <%= link_to 'Editar información del laboratorio', edit_laboratorio_path(@laboratorio), class: 'btn btn-default text-center ' %>
+        <% end %>
 </div>
-<%= link_to 'Edit', edit_laboratorio_path(@laboratorio) %> |
-<%= link_to 'Back', laboratorios_path %>

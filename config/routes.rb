@@ -46,10 +46,20 @@ Rails.application.routes.draw do
   
   post 'articulos/eliminar/prestamo/:id_articulo' => 'articulos#eliminar_de_prestamo', as: :eliminar_articulo_prestamo
  
-  post 'usuarios/prestamo/agregar/:categoria' => 'usuario_prestamos#new', as: :agregar_usuario_prestamo
+  get 'usuarios/prestamo/agregar/:categoria' => 'usuario_prestamos#new', as: :agregar_usuario_prestamo
+  
+  get 'materias/registrar/:id_laboratorio' => 'materias#new', as: :registrar_materia
+  
+
   
   devise_scope :usuario do
-    get "/usuarios/sistema" => "usuarios/registrations#index"
+    get "/usuarios/sistema(/:id_laboratorio)" => "usuarios/registrations#index", as: :usuarios_sistema_laboratorio
+    get "/usuarios/sistema/registrar/(:id_laboratorio)" => "usuarios/registrations#new", as: :registrar_usuario_sistema
+    get "/usuarios/sistema/:id/" => "usuarios/registrations#ver", as: :usuario_sistema
+    get "/usuarios/sistema/:id/editar" => "usuarios/registrations#editar", as: :editar_usuario
+    patch "/usuarios/sistema/:id/actualizar" => "usuarios/registrations#actualizar", as: :actualizar_usuario
+    delete "usuarios/sistema/:id" => "usuarios/registrations#eliminar", as: :eliminar_usuario
+    post "articulos/codigo/:id" => "articulos#descargar_codigo", as: :generar_codigo
   end
   root 'laboratorios#index'
   

@@ -4,18 +4,55 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   before_action :authenticate_scope!
   before_filter :configure_sign_up_params, only: [:create]
   before_filter :configure_account_update_params, only: [:update]
+  before_action :set_usuario, only: [:editar, :eliminar, :actualizar]
+  before_action :set_opciones, only: [:new, :editar]
 
   # GET /resource/sign_up
   def new
+    
+    @usuario = Usuario.new(laboratorio: @laboratorio)
+    
   end
 
-  # POST /resource
-  def create
-  end
+  
   
   def index
-    authorize! :ver, Usuario.new
-    @usuarios = Usuario.all.order(:laboratorio_id)
+    if(params[:id_laboratorio] && Laboratorio.exists?(params[:id_laboratorio]))
+      @laboratorio = Laboratorio.find(params[:id_laboratorio])
+      @usuarios = Usuario.where(:laboratorio_id => @laboratorio.id).where.not(:rol => Usuario.roles[:administrador])
+      
+    else
+      @usuarios = Usuario.all.order(:laboratorio_id)   
+    end
+    @usuarios.each do |u|
+        authorize! :ver, u
+    end
+    
+  end
+  
+  def editar
+    
+  end
+  
+  def eliminar
+    laboratorio = @usuario.laboratorio
+    authorize! :eliminar, @usuario
+    if @usuario.destroy
+      redirect_to usuarios_sistema_laboratorio_path(laboratorio), notice: "El usuario fue eliminado correctamente"
+    end
+  end
+  
+  def actualizar
+    authorize! :editar, @usuario
+    respond_to do |format|
+      if @usuario.update(usuario_params)
+        format.html { redirect_to usuarios_sistema_laboratorio_path(@usuario.laboratorio), notice: 'El usuario fue modificado correctamente.' }
+        format.json { render :show, status: :ok, location: @usuario }
+      else
+        format.html { render :edit }
+        format.json { render json: @materia.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # GET /resource/edit
@@ -53,6 +90,33 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   def configure_account_update_params
     devise_parameter_sanitizer.for(:account_update) << :laboratorio_id << :nombre << :apellido_paterno << :apellido_materno << :nombre_usuario << :rol
   end
+  
+  def set_usuario
+    @usuario = Usuario.find(params[:id])
+    
+  end
+  
+  def set_opciones
+    if params[:id_laboratorio] && Laboratorio.exists?(params[:id_laboratorio])
+      @laboratorio = Laboratorio.find(params[:id_laboratorio])
+    end
+    @roles = [] # Roles que son asignables por el usuaro
+    Usuario.roles.each do |r|
+      if can? :crear, Usuario.new(laboratorio: @laboratorio, rol: r[0])
+        @roles << r
+      end
+    end
+    @laboratorios = [] # Laboratorios que son asignables por el usuaro
+    Laboratorio.all.each do |l|
+      if can? :crear, Usuario.new(laboratorio: l, rol: :encargado_laboratorio)
+        @laboratorios << l
+      end
+    end
+  end
+  
+  def usuario_params
+      params.require(:usuario).permit(:email, :nombre, :apellido_paterno, :apellido_materno, :laboratorio_id, :rol)
+  end
   # The path used after sign up.
   # def after_sign_up_path_for(resource)
   #   super(resource)
@@ -63,3 +127,4 @@ class Usuarios::RegistrationsController < Devise::RegistrationsController
   #   super(resource)
   # end
 end
+

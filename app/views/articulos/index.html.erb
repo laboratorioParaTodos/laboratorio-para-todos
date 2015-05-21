@@ -6,6 +6,8 @@
     <%= render 'layouts/articulos/articulos_prestamo'%>
 </div>
 
+
+
 <% unless @articulos.any? %>
   <div class="alert alert-info">
       No se encontraron artículos registrados
@@ -34,7 +36,7 @@
                   <div class="text-center">			
                       <%= link_to 'Ver artículo', articulo, class: 'btn btn-primary link-white' %>
                     </div>
-                    <% if articulo.disponible? %>
+                    <% if articulo.disponible? && can?(:crear, Prestamo.new(articulo: articulo)) %>
                       <%= button_to "Registrar en préstamo", agregar_articulo_prestamo_path(articulo), class: 'btn btn-default center-block btn-xs margin-5', remote: true %>
                       <% end %>
                     <% end %>
@@ -42,7 +44,14 @@
               <% end %>
           </div>
         <% end %>
-
         <div class="text-center form-group">
-            <%= link_to 'Agregar artículo', new_articulo_path, class: 'btn btn-default' %>	
-          </div>
+	        <% if can? :descargar_reporte, @articulos %>   
+	        	<%= link_to  articulos_por_laboratorio_path(@laboratorio, format: :xlsx), class: 'btn btn-default' do %>
+	        		<%= fa_icon "file-excel-o", text: "Descargar reporte" %>  
+	        	<% end %>
+	        <% end %>
+	
+	        <% if can? :crear, Articulo.new(laboratorio: @laboratorio) %>          
+	              <%= link_to 'Agregar artículo', new_articulo_path, class: 'btn btn-default' %>	         
+	        <% end %>
+         </div>

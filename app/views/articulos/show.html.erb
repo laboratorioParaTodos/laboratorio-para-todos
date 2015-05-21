@@ -7,16 +7,18 @@
 <div id="articulos_para_prestamo">
     <%= render 'layouts/articulos/articulos_prestamo'%>
 </div>
-
+<%= iconic_icon :edit%>
 <div class="row">
     <div class="col-sm-3">
-        <%= image_tag @articulo.get_imagen, class: ' thumbnail media-object img-responsive center-block'%>
+      <%= image_tag @articulo.get_imagen, class: ' thumbnail media-object img-responsive center-block'%>
+        
+      <% if can? :editar, @articulo %>
+        <%= form_for(articulo_path(@articulo), remote: true, method: :get) do |f| %>
+          <%= f.submit "Cambiar imagen", class: 'center-block btn btn-default btn-sm' %>
+        <% end %>
+      <% end %>
+    </div>
 
-
-          <%= form_for(articulo_path(@articulo), remote: true, method: :get) do |f| %>
-            <%= f.submit "Cambiar imagen", class: 'center-block btn btn-default btn-sm' %>
-            <% end %>
-        </div>
         <div class="col-sm-9">
             <%= bootstrap_form_for @articulo do |f| %>
 
@@ -68,16 +70,31 @@
     </div>
 
     <div class="text-center">
-        <div class="form-group">
-            <%= link_to 'Modificar información del artículo', edit_articulo_path(@articulo), class: 'btn btn-default' %>
-              <%= link_to 'Ver otros artículos del laboratorio de ' + @articulo.laboratorio.nombre , articulos_por_laboratorio_path(@articulo.laboratorio), class: 'btn btn-default' %><br />
-            </div>
-            <% if @articulo.disponible? %>
-              <%= button_to "Registrar en préstamo", agregar_articulo_prestamo_path(@articulo), class: 'btn btn-default center-block btn-xs margin-5', remote: true %>
-              <% end %>
+      <div class="form-group">
+        <% if can? :editar, @articulo %>
+          <%= link_to 'Modificar información del artículo', edit_articulo_path(@articulo), class: 'btn btn-default btn-sm'  %>
+        <% end %>
+        <% if can? :generar_codigo, @articulo %>
+        	<%= link_to 'Generar código de barras', generar_codigo_path(@articulo), class: 'btn btn-default btn-sm', method: :post, target: "_blank"%>
+        <% end %>
+        <%= link_to 'Ver otros artículos del laboratorio de ' + @articulo.laboratorio.nombre , articulos_por_laboratorio_path(@articulo.laboratorio), class: 'btn btn-default btn-sm'  %>
+	      <% if can? :descargar_reporte, @articulo %>
+	      	<%= link_to articulo_path(format: :xlsx), class: 'btn btn-default btn-sm' do %>
+	      		<%= fa_icon "file-excel-o", text: "Descargar reporte" %> 
+	      	<% end %>
+	      <% end %>
+      </div>
+        
+      <% if @articulo.disponible? && can?(:crear, Prestamo.new(articulo: @articulo)) %>
+        <%= button_to "Registrar en préstamo", agregar_articulo_prestamo_path(@articulo), class: 'btn btn-default center-block btn-xs margin-5', remote: true %>
+      <% end %>
+      
+      
 
-              <%= link_to 'Eliminar este artículo', @articulo, method: :delete, data: { confirm: '¿Está seguro que desea eliminar este artículo?' }, class: 'btn btn-danger link-white' %>
-            </div>
+      <% if can?(:eliminar, @articulo) %>
+        <%= link_to 'Eliminar este artículo', @articulo, method: :delete, data: { confirm: '¿Está seguro que desea eliminar este artículo?' }, class: 'btn btn-danger link-white' %>
+      <% end %>
+    </div>
 
-            <%= render "layouts/articulos/imagenes_articulo_modal" %>
+<%= render "layouts/articulos/imagenes_articulo_modal" %>
 

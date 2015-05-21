@@ -3,28 +3,32 @@
 <% end %>
 
 <% @departamentos.each do |dep| %>
-  <div class="page-header">
-      <h2>Departamento de <%= dep.nombre %> </h2>
-  </div>
-  <% dep.laboratorios.in_groups_of(3, false) do |lg| %>
-  <div class="row row-imagen">
-      <% lg.each do |lab| %>
-        <div class="col-sm-4">
-            <%= link_to lab do %>
-              <h3 class="text-center">Laboratorio de <%= lab.nombre %></h3>
-              <% if lab.imagen_laboratorios.any? %>
-                <%= image_tag lab.imagen_laboratorios.first.imagen.url, class: "thumbnail img-responsive center-block"%>
-                <% else %>
-                  <%= image_tag "/uploads/imagen no disponible.jpg", class: "thumnail img-responsive center-block" %>
-                  <% end  %>
-                <% end %>
-            </div>
-          <% end %>
-      </div>
+
+  <% if dep.laboratorios.any? %>
+	  <div class="page-header">
+	      <h2>Departamento de <%= dep.nombre %> </h2>
+	  </div>
+	  <% dep.laboratorios.in_groups_of(3, false) do |lg| %>
+	    <div class="row row-imagen">
+	        <% lg.each do |lab| %>
+	          <div class="col-sm-4">
+	              <%= link_to lab do %>
+	                <h3 class="text-center">Laboratorio de <%= lab.nombre %></h3>
+	                <% if lab.imagen_laboratorios.any? %>
+	                  <%= image_tag lab.imagen_laboratorios.first.imagen.url, class: "thumbnail img-responsive center-block"%>
+	                  <% else %>
+	                    <%= image_tag "/uploads/imagen no disponible.jpg", class: "thumnail img-responsive center-block" %>
+	                    <% end  %>
+	                  <% end %>
+	              </div>
+	            <% end %>
+	        </div>
+	      <% end %>
+	    <% end %>
     <% end %>
-<% end %>
-
-
-    <div class="text-center">	
+  
+    <% if can? :crear, Laboratorio %>
+      <div class="text-center">	
         <%= link_to 'Agregar laboratorio', new_laboratorio_path, class: "btn btn-primary link-white" %>
       </div>
+    <% end %>

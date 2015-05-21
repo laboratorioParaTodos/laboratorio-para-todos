@@ -1,5 +1,8 @@
 <% content_for :titulo do %>
   Usuarios del sistema registrados
+  <% if @laboratorio %>
+  	<br/><small>Laboratorio de <%= @laboratorio.nombre%></small>
+  <% end %>
 <% end  %>
 
 <table class="table table table-striped table-hover">
@@ -8,6 +11,7 @@
         <th>Email</th>
         <th>Laboratorio</th>
         <th>Rol</th>
+        <th></th>
     </tr>
     <% @usuarios.each do |u| %>
       <tr>
@@ -23,10 +27,21 @@
                 <%= u.rol.to_s.capitalize.gsub("_", " ") %>
               <% end  %>
           </td>
+          <td class="text-center">
+          	<% if can? :editar, u%>
+          		<%= link_to "Editar", editar_usuario_path(u), class: "btn btn-default" %>
+          	<% end %>
+          	<% if can? :eliminar, u %>
+          	    <%= link_to "Eliminar", eliminar_usuario_path(u), method: :delete, data:{ confirm: "¿Está seguro que desea eliminar este usuario?" }, class: "btn btn-danger link-white" %>
+			<% end %>
+          </td>
       </tr>
     <% end  %>
 </table>
 
 <div class="text-center">
+	<% if can? :manage, Usuario %>
+	<%= link_to "Ver todos los usuarios", usuarios_sistema_laboratorio_path, class: "btn btn-default" %>
+<% end %>
     <%= link_to "Agregar nuevo usuario de sistema", new_usuario_registration_path(), class: 'btn btn-primary link-white'%>
 </div>
